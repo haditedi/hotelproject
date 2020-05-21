@@ -1,42 +1,120 @@
 import { Link } from "gatsby"
-import PropTypes from "prop-types"
 import React from "react"
+import MenuIcon from "@material-ui/icons/Menu"
+import Box from "@material-ui/core/Box"
+import Menu from "@material-ui/core/Menu"
+import MenuItem from "@material-ui/core/MenuItem"
+import { makeStyles } from "@material-ui/core/styles"
+import css from "./header.module.css"
 
-const Header = ({ siteTitle }) => (
-  <header
-    style={{
-      background: `rebeccapurple`,
-      marginBottom: `1.45rem`,
-    }}
-  >
-    <div
-      style={{
-        margin: `0 auto`,
-        maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: `white`,
-            textDecoration: `none`,
+const useStyles = makeStyles({
+  root: {
+    margin: "auto 20px",
+  },
+  back: {
+    backgroundColor: "#035aa6",
+  },
+})
+
+const Header = ({ siteTitle }) => {
+  const classes = useStyles()
+  const [anchorEl, setAnchorEl] = React.useState(null)
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  return (
+    <header className={classes.back}>
+      <nav
+        style={{
+          display: "flex",
+        }}
+      >
+        <Link to="/">
+          <h1 className={classes.root}>Logo</h1>
+        </Link>
+        <div className={css.notShow}>
+          <Link
+            to="/"
+            className={css.navItem}
+            activeClassName={css.activeNavItem}
+          >
+            Home
+          </Link>
+          <Link
+            to="/rooms"
+            className={css.navItem}
+            activeClassName={css.activeNavItem}
+          >
+            Rooms
+          </Link>
+          <Link
+            to="/about"
+            className={css.navItem}
+            activeClassName={css.activeNavItem}
+          >
+            About
+          </Link>
+          <Link
+            to="/contact"
+            className={css.navItem}
+            activeClassName={css.activeNavItem}
+          >
+            Contact
+          </Link>
+        </div>
+
+        <Box
+          component="div"
+          ml="auto"
+          mt="auto"
+          mb="auto"
+          display={{
+            xs: "block",
+            sm: "none",
+            md: "none",
+            lg: "none",
+            xl: "none",
           }}
         >
-          {siteTitle}
-        </Link>
-      </h1>
-    </div>
-  </header>
-)
-
-Header.propTypes = {
-  siteTitle: PropTypes.string,
-}
-
-Header.defaultProps = {
-  siteTitle: ``,
+          <MenuIcon
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            Open Menu
+          </MenuIcon>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleClose}>
+              <Link to="/">Home</Link>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <Link to="/rooms">Rooms</Link>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              {" "}
+              <Link to="/about">About</Link>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              {" "}
+              <Link to="/contact">Contact</Link>
+            </MenuItem>
+          </Menu>
+        </Box>
+      </nav>
+    </header>
+  )
 }
 
 export default Header
