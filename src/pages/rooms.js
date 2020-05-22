@@ -1,5 +1,6 @@
 import React from "react"
 import Layout from "../components/layout"
+import animation from "./animation.module.css"
 import SEO from "../components/seo"
 import Card from "../components/card"
 import StandardRoom from "../components/images/standard-room"
@@ -9,7 +10,12 @@ const Rooms = () => {
   return (
     <Layout>
       <div>
-        <h1 className="heading">Our Beautiful Rooms</h1>
+        <section>
+          <h1 className={`heading ${animation.trackingIn}`}>
+            Our Beautiful Rooms
+          </h1>
+        </section>
+
         <section>
           <Card image={<StandardRoom />}>
             <h2>Standard Room</h2>

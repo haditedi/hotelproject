@@ -1,27 +1,27 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import Img from "gatsby-image"
 
 const Image = props => {
   const data = useStaticQuery(graphql`
     query {
-      desktop: file(relativePath: { eq: "hotel-paradise.jpg" }) {
-        childImageSharp {
+      outdoor: file(relativePath: { eq: "hotel-paradise.jpg" }) {
+        child: childImageSharp {
           fluid {
             ...GatsbyImageSharpFluid
           }
         }
       }
-      desktopPool: file(relativePath: { eq: "hotel-pool.jpg" }) {
-        childImageSharp {
+      pool: file(relativePath: { eq: "hotel-pool.jpg" }) {
+        child: childImageSharp {
           fluid {
             ...GatsbyImageSharpFluid
           }
         }
       }
-      mobile: file(relativePath: { eq: "hotel-outdoor.jpg" }) {
-        childImageSharp {
-          fluid(maxWidth: 700) {
+      night: file(relativePath: { eq: "hotel-outdoor.jpg" }) {
+        child: childImageSharp {
+          fluid {
             ...GatsbyImageSharpFluid
           }
         }
@@ -29,23 +29,42 @@ const Image = props => {
     }
   `)
 
-  const sources = [
-    data.mobile.childImageSharp.fluid,
-    {
-      ...data.desktop.childImageSharp.fluid,
-      media: `(min-width: 700px)`,
-    },
-  ]
-
-  return (
+  const [hero, setHero] = useState(
     <Img
-      // style={{ height: "70vh", objectFit: "contain" }}
-      // imgStyle={{ height: "100%", width: "50%" }}
+      style={{ maxHeight: "70vh" }}
+      imgStyle={{ objectFit: "cover" }}
       className={props.className}
-      fluid={sources}
+      fluid={data.outdoor.child.fluid}
       alt="hotel paradise"
     />
   )
+
+  useEffect(() => {
+    setTimeout(() => {
+      setHero(
+        <Img
+          style={{ maxHeight: "70vh" }}
+          imgStyle={{ objectFit: "cover" }}
+          className={props.className}
+          fluid={data.pool.child.fluid}
+          alt="hotel swimming pool"
+        />
+      )
+    }, 5000)
+    setTimeout(() => {
+      setHero(
+        <Img
+          style={{ maxHeight: "70vh" }}
+          imgStyle={{ objectFit: "cover" }}
+          className={props.className}
+          fluid={data.night.child.fluid}
+          alt="hotel night view"
+        />
+      )
+    }, 10000)
+  }, [])
+
+  return <div>{hero}</div>
 }
 
 export default Image

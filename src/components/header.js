@@ -74,6 +74,7 @@ const Header = ({ siteTitle }) => {
           ml="auto"
           mt="auto"
           mb="auto"
+          mr="30px"
           display={{
             xs: "block",
             sm: "none",
