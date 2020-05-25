@@ -5,16 +5,13 @@ import SEO from "../components/seo"
 import Card from "../components/card"
 import StandardRoom from "../components/images/standard-room"
 import SuperiorRoom from "../components/images/superior-room"
+import HeadingText from "../components/HeadingText"
 
 const Rooms = () => {
   return (
     <Layout>
       <div>
-        <section>
-          <h1 className={`heading ${animation.trackingIn}`}>
-            Our Beautiful Rooms
-          </h1>
-        </section>
+        <HeadingText>Our Beautiful Rooms</HeadingText>
 
         <section>
           <Card image={<StandardRoom />}>

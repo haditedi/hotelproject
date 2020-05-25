@@ -5,36 +5,82 @@ import Img from "gatsby-image"
 const Image = props => {
   const data = useStaticQuery(graphql`
     query {
-      outdoor: file(relativePath: { eq: "hotel-paradise.jpg" }) {
+      outdoorMobile: file(relativePath: { eq: "hotel-paradise.jpg" }) {
         child: childImageSharp {
-          fluid {
+          fluid(maxWidth: 1000, quality: 100) {
             ...GatsbyImageSharpFluid
           }
         }
       }
-      pool: file(relativePath: { eq: "hotel-pool.jpg" }) {
+      outdoorDesktop: file(relativePath: { eq: "hotel-desktop.jpg" }) {
         child: childImageSharp {
-          fluid {
+          fluid(maxWidth: 1800, quality: 100) {
             ...GatsbyImageSharpFluid
           }
         }
       }
-      night: file(relativePath: { eq: "hotel-outdoor.jpg" }) {
+
+      poolMobile: file(relativePath: { eq: "hotel-pool.jpg" }) {
         child: childImageSharp {
-          fluid {
+          fluid(maxWidth: 1000, quality: 100) {
+            ...GatsbyImageSharpFluid
+          }
+        }
+      }
+      poolDesktop: file(relativePath: { eq: "hotel-pool.jpg" }) {
+        child: childImageSharp {
+          fluid(maxWidth: 1800, quality: 100) {
+            ...GatsbyImageSharpFluid
+          }
+        }
+      }
+
+      nightMobile: file(relativePath: { eq: "hotel-night.jpg" }) {
+        child: childImageSharp {
+          fluid(maxWidth: 1000, quality: 100) {
+            ...GatsbyImageSharpFluid
+          }
+        }
+      }
+      nightDesktop: file(relativePath: { eq: "hotel-night.jpg" }) {
+        child: childImageSharp {
+          fluid(maxWidth: 1800, quality: 100) {
             ...GatsbyImageSharpFluid
           }
         }
       }
     }
   `)
+  const sourceOutdoor = [
+    data.outdoorMobile.child.fluid,
+    {
+      ...data.outdoorDesktop.child.fluid,
+      media: `(min-width: 800px)`,
+    },
+  ]
+  const sourcePool = [
+    data.poolMobile.child.fluid,
+    {
+      ...data.poolDesktop.child.fluid,
+      media: `(min-width: 800px)`,
+    },
+  ]
+  const sourceNight = [
+    data.nightMobile.child.fluid,
+    {
+      ...data.nightDesktop.child.fluid,
+      media: `(min-width: 800px)`,
+    },
+  ]
 
+  const style = { height: "70vh" }
+  const imgHeight = "100%"
   const [hero, setHero] = useState(
     <Img
-      style={{ maxHeight: "70vh" }}
-      imgStyle={{ objectFit: "cover" }}
+      style={style}
+      imgStyle={{ objectFit: "cover", height: imgHeight }}
       className={props.className}
-      fluid={data.outdoor.child.fluid}
+      fluid={sourceOutdoor}
       alt="hotel paradise"
     />
   )
@@ -43,10 +89,13 @@ const Image = props => {
     setTimeout(() => {
       setHero(
         <Img
-          style={{ maxHeight: "70vh" }}
-          imgStyle={{ objectFit: "cover" }}
+          style={style}
+          imgStyle={{
+            objectFit: "cover",
+            height: imgHeight,
+          }}
           className={props.className}
-          fluid={data.pool.child.fluid}
+          fluid={sourcePool}
           alt="hotel swimming pool"
         />
       )
@@ -54,17 +103,20 @@ const Image = props => {
     setTimeout(() => {
       setHero(
         <Img
-          style={{ maxHeight: "70vh" }}
-          imgStyle={{ objectFit: "cover" }}
+          style={style}
+          imgStyle={{
+            objectFit: "cover",
+            height: imgHeight,
+          }}
           className={props.className}
-          fluid={data.night.child.fluid}
+          fluid={sourceNight}
           alt="hotel night view"
         />
       )
     }, 10000)
   }, [])
 
-  return <div>{hero}</div>
+  return <section>{hero}</section>
 }
 
 export default Image

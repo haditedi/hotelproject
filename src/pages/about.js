@@ -3,14 +3,14 @@ import Layout from "../components/layout"
 import animation from "./animation.module.css"
 import AboutImg from "../components/images/AboutImg"
 import ParaContainer from "../components/ParaContainer"
+import HeadingText from "../components/HeadingText"
 
 const about = () => {
   return (
     <Layout>
       <div>
-        <section>
-          <h1 className={`heading ${animation.trackingIn}`}>About us</h1>
-        </section>
+        <HeadingText>About Us</HeadingText>
+
         <section>
           <AboutImg />
         </section>

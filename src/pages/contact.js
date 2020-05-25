@@ -2,14 +2,13 @@ import React from "react"
 import Layout from "../components/layout"
 import animation from "./animation.module.css"
 import ParaContainer from "../components/ParaContainer"
+import HeadingText from "../components/HeadingText"
 
 const contact = () => {
   return (
     <Layout>
       <div>
-        <section>
-          <h1 className={`heading ${animation.trackingIn}`}>Contact us</h1>
-        </section>
+        <HeadingText>Contact Us</HeadingText>
       </div>
     </Layout>
   )

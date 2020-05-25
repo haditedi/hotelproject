@@ -1,11 +1,5 @@
 /* 120136 035aa6 40bad5 fcbf1e
 */
-.heading {
-  text-align: center;
-  margin: 1em;
-  font-family: "Alfa Slab One";
-  font-size: 8vw;
-}
 
 html {
   font-family: sans-serif;
@@ -40,16 +34,6 @@ a:hover {
   outline-width: 0;
 }
 
-h1 {
-  font-size: 2em;
-  margin: 0.67em 0;
-  font-family: "Alfa Slab One";
-}
-
-img {
-  border-style: none;
-}
-
 body {
   font-family: Roboto, sans-serif;
   font-weight: normal;
@@ -74,17 +58,17 @@ img {
 h1 {
   margin-left: 0;
   margin-right: 0;
-  margin-top: 0;
+  margin-top: 1rem;
   padding-bottom: 0;
   padding-left: 0;
   padding-right: 0;
   padding-top: 0;
-  margin-bottom: 1.45rem;
+  margin-bottom: 1rem;
   color: #120136;
   font-family: Alfa Slab One, serif;
   font-weight: bold;
   text-rendering: optimizeLegibility;
-  font-size: 2.25rem;
+  font-size: 3rem;
   line-height: 1.1;
 }
 h2 {
