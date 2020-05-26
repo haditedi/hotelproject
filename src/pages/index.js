@@ -6,13 +6,25 @@ import SearchAvailability from "../components/SearchAvailability"
 import HeadingText from "../components/HeadingText"
 import moment from "moment"
 import animation from "./animation.module.css"
+import firebase from "../components/Firebase"
 
 const IndexPage = () => {
   const [state, setSearchState] = React.useState({
     room: 1,
-    arrivalDate: moment(),
-    departureDate: moment().add(1, "days"),
+    arrivalDate: moment()._d,
+    departureDate: moment().add(1, "days")._d,
   })
+
+  useEffect(() => {
+    if (state.arrivalDate > state.departureDate) {
+      setSearchState(prevState => {
+        return {
+          ...prevState,
+          departureDate: moment(state.arrivalDate).add(1, "days")._d,
+        }
+      })
+    }
+  }, [state.arrivalDate])
 
   const handleSearchChange = event => {
     let nam = event.target.name
@@ -28,20 +40,21 @@ const IndexPage = () => {
   const handleDateChange = (event, param) => {
     let nam = param
     let val = event._d
-    console.log(val, param)
+
     setSearchState(prevState => {
       return {
         ...prevState,
         [nam]: val,
       }
     })
+    console.log(state)
   }
 
   const handleSubmit = event => {
     event.preventDefault()
     console.log(state)
   }
-
+  console.log(state)
   return (
     <Layout>
       <SEO title="Home" />
