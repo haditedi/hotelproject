@@ -27,11 +27,8 @@ const SearchAvailability = props => {
 
   return (
     <section>
-      <form
-        style={{ textAlign: "center", margin: "150px 0" }}
-        onSubmit={props.submit}
-      >
-        <h4 style={{ marginBottom: "0", marginTop: "20px" }}>
+      <form style={{ margin: "35px 20%" }} onSubmit={props.submit}>
+        <h4 style={{ margin: "10px auto", paddingLeft: "10px" }}>
           Search Availability
         </h4>
         <FormControl className={classes.root}>

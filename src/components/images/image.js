@@ -119,7 +119,7 @@ const Image = props => {
   // }, [])
 
   return (
-    <Carousel>
+    <Carousel showThumbs={false}>
       <div>
         <Img
           fixed={sourceOutdoor}
