@@ -1,0 +1,14 @@
+.formui {
+  display: flex;
+  flex-direction: column;
+
+  margin: 10px auto;
+  padding: 10px 0;
+  width: 100%;
+}
+
+@media (min-width: 600px) {
+  .formui {
+    width: 50vw;
+  }
+}

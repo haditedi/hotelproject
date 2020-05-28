@@ -1,6 +1,8 @@
 /* 120136 035aa6 40bad5 fcbf1e
 */
 
+@import url("https://fonts.googleapis.com/css2?family=Volkhov&display=swap");
+
 html {
   font-family: sans-serif;
   width: 100%;
@@ -8,13 +10,12 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 body {
-  margin: 0;
   width: 100%;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   max-width: 1440px;
-  margin: auto;
+  margin: 0 auto;
   background-color: #40bad5;
   color: #120136;
 }
@@ -65,7 +66,7 @@ h1 {
   padding-top: 0;
   margin-bottom: 1rem;
   color: #120136;
-  font-family: Alfa Slab One, serif;
+  font-family: "Volkhov", serif;
   font-weight: bold;
   text-rendering: optimizeLegibility;
   font-size: 3rem;
@@ -81,8 +82,8 @@ h2 {
   padding-top: 0;
   margin-bottom: 1.45rem;
   color: #120136;
-  font-family: Alfa Slab One;
-  font-weight: bold;
+  font-family: "Volkhov", serif;
+
   text-rendering: optimizeLegibility;
   font-size: 1.62671rem;
   line-height: 1.1;
@@ -97,8 +98,8 @@ h3 {
   padding-top: 0;
   margin-bottom: 1.45rem;
   color: #120136;
-  font-family: Alfa Slab One;
-  font-weight: bold;
+  font-family: "Volkhov", serif;
+
   text-rendering: optimizeLegibility;
   font-size: 1.38316rem;
   line-height: 1.1;
@@ -113,8 +114,8 @@ h4 {
   padding-top: 0;
   margin-bottom: 1.45rem;
   color: #120136;
-  font-family: Alfa Slab One;
-  font-weight: bold;
+  font-family: "Volkhov", serif;
+
   text-rendering: optimizeLegibility;
   font-size: 1rem;
   line-height: 1.1;
@@ -129,8 +130,8 @@ h5 {
   padding-top: 0;
   margin-bottom: 1.45rem;
   color: inherit;
-  font-family: Alfa Slab One;
-  font-weight: bold;
+  font-family: "Volkhov", serif;
+
   text-rendering: optimizeLegibility;
   font-size: 0.85028rem;
   line-height: 1.1;
@@ -145,9 +146,8 @@ h6 {
   padding-top: 0;
   margin-bottom: 1.45rem;
   color: inherit;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  font-weight: bold;
+  font-family: "Volkhov", serif;
+
   text-rendering: optimizeLegibility;
   font-size: 0.78405rem;
   line-height: 1.1;

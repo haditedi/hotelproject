@@ -4,8 +4,6 @@ import InputLabel from "@material-ui/core/InputLabel"
 import MenuItem from "@material-ui/core/MenuItem"
 import FormControl from "@material-ui/core/FormControl"
 import Select from "@material-ui/core/Select"
-// import "date-fns"
-// import DateFnsUtils from "@date-io/date-fns"
 import "moment"
 import MomentUtils from "@date-io/moment"
 import Button from "@material-ui/core/Button"
@@ -47,6 +45,7 @@ const SearchAvailability = props => {
             <MenuItem value={5}>Five</MenuItem>
             <MenuItem value={6}>Six</MenuItem>
             <MenuItem value={7}>Seven</MenuItem>
+            <MenuItem value={8}>Eight</MenuItem>
           </Select>
         </FormControl>
 

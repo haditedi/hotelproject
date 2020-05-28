@@ -4,7 +4,7 @@ import firebase from "../components/Firebase"
 export default () => {
   const [myvar, setMyvar] = useState([])
 
-  let hotelRef = firebase.firestore().collection("hotel")
+  const hotelRef = firebase.firestore().collection("hotel")
   const viewAll = firebase
     .firestore()
     .collectionGroup("availability")
