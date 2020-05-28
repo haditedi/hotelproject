@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import Layout from "../components/layout"
-import Image from "../components/images/Image"
+import Image from "../components/images/image"
 import SEO from "../components/seo"
 import SearchAvailability from "../components/SearchAvailability"
 import HeadingText from "../components/HeadingText"
