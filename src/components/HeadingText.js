@@ -10,7 +10,12 @@ const HeadingText = props => {
         backgroundColor: "#fcbf1e",
       }}
     >
-      <h1 className={animation.trackingIn}>{props.children}</h1>
+      <h1
+        style={{ padding: "7px", margin: "0" }}
+        className={animation.trackingIn}
+      >
+        {props.children}
+      </h1>
     </section>
   )
 }

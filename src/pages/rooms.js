@@ -13,29 +13,28 @@ const Rooms = () => {
       <div>
         <HeadingText>Our Beautiful Rooms</HeadingText>
 
-        <section>
-          <Card image={<StandardRoom />}>
-            <h2>Standard Room</h2>
-            <h3>Features: </h3>
-            <ul>
-              <li>King Size bed</li>
-              <li>Size: 50 sqm</li>
-              <li>Full breakfast included</li>
-            </ul>
-          </Card>
-        </section>
-        <section>
-          <Card image={<SuperiorRoom />}>
-            <h2>Superior Room</h2>
-            <h3>Features: </h3>
-            <ul>
-              <li>Super King Size bed</li>
-              <li>Size: 70 sqm</li>
-              <li>Full breakfast included</li>
-              <li>Sea view</li>
-            </ul>
-          </Card>
-        </section>
+        <Card image={<StandardRoom />}>
+          <h2>Standard Room</h2>
+          <hr style={{ width: "50%" }} />
+          <h3>Features: </h3>
+          <ul>
+            <li>King Size bed</li>
+            <li>Size: 50 sqm</li>
+            <li>Full breakfast included</li>
+          </ul>
+        </Card>
+
+        <Card image={<SuperiorRoom />}>
+          <h2>Superior Room</h2>
+          <hr style={{ width: "50%" }} />
+          <h3>Features: </h3>
+          <ul>
+            <li>Super King Size bed</li>
+            <li>Size: 70 sqm</li>
+            <li>Full breakfast included</li>
+            <li>Sea view</li>
+          </ul>
+        </Card>
       </div>
     </Layout>
   )

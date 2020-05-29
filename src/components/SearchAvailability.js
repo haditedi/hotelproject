@@ -7,13 +7,12 @@ import Select from "@material-ui/core/Select"
 import "moment"
 import MomentUtils from "@date-io/moment"
 import Button from "@material-ui/core/Button"
-
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers"
 
 const useStyles = makeStyles(theme => ({
   root: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 180,
   },
   nomargin: {
     margin: 0,
@@ -24,7 +23,7 @@ const SearchAvailability = props => {
   const classes = useStyles()
 
   return (
-    <section>
+    <section style={{ textAlign: "center" }}>
       <form style={{ margin: "35px 20%" }} onSubmit={props.submit}>
         <h4 style={{ margin: "10px auto", paddingLeft: "10px" }}>
           Search Availability
@@ -32,6 +31,7 @@ const SearchAvailability = props => {
         <FormControl className={classes.root}>
           <InputLabel id="room">Room</InputLabel>
           <Select
+            style={{ textAlign: "left" }}
             labelId="room"
             id="room"
             name="room"
@@ -54,6 +54,7 @@ const SearchAvailability = props => {
             <DatePicker
               disableToolbar
               disablePast
+              autoOk
               variant="inline"
               format="DD MMM YYYY"
               id="arrival-date"
@@ -68,6 +69,7 @@ const SearchAvailability = props => {
             <DatePicker
               disableToolbar
               disablePast
+              autoOk
               variant="inline"
               format="DD MMM YYYY"
               id="departure-date"
@@ -77,7 +79,12 @@ const SearchAvailability = props => {
             />
           </MuiPickersUtilsProvider>
         </FormControl>
-        <Button className={classes.root} variant="contained" type="submit">
+        <Button
+          id="searchButton"
+          className={classes.root}
+          variant="contained"
+          type="submit"
+        >
           Search
         </Button>
       </form>

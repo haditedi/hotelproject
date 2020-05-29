@@ -1,16 +1,14 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin: 15px;
+  margin: 25px;
   box-shadow: 0 3px 3px 3px #035aa6;
 }
 .imgCont {
-  width: 90%;
   margin: 10px;
 }
 .para {
-  width: 100%;
-  margin: auto;
+  margin: 15px;
   text-align: center;
 }
 .para ul {
@@ -25,10 +23,22 @@
   margin: 10px;
 }
 
-@media (min-width: 500px) {
-  .container {
+@media (min-width: 770px) {
+  .outer {
+    display: flex;
     flex-direction: row;
-    margin: 10px;
     padding: 10px;
+    justify-content: center;
+  }
+  .container {
+    width: 80vw;
+    flex-direction: row;
+    padding: 10px;
+  }
+  .imgCont {
+    width: 50%;
+  }
+  .para {
+    margin: auto;
   }
 }

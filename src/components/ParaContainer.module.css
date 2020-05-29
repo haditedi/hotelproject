@@ -9,6 +9,9 @@
 .para p {
   line-height: 1.8em;
 }
+.para h3 {
+  margin-top: 1.45rem;
+}
 
 @media (min-width: 500px) {
   .para {

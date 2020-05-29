@@ -74,26 +74,26 @@ const SetAvailability = () => {
     const stdRoom = firebase.firestore().collection("stdRoom")
     const supRoom = firebase.firestore().collection("supRoom")
 
-    let momentDate = moment("2020-05-28").startOf("day")._d
+    let momentDate = moment("2020-06-07").startOf("day")._d
 
-    // let interval = setInterval(() => {
-    //   stdRoom
-    //     .add({ avail: 7, date: momentDate, rate: 170 })
-    //     .then(function () {
-    //       console.log("Document successfully written!")
-    //     })
-    //     .catch(function (error) {
-    //       console.error("Error writing document: ", error)
-    //     })
-    //   momentDate = moment(momentDate).add(1, "d").startOf("day")._d
-    //   console.log(momentDate)
-    //   console.log("stdRoom , wait,,,3 sec")
-    //   if (momentDate >= moment("2020-06-07").startOf("day")._d) {
-    //     clearInterval(interval)
-    //     momentDate = moment("2020-05-28").startOf("day")._d
-    //     runSupRoom()
-    //   }
-    // }, 3000)
+    let interval = setInterval(() => {
+      stdRoom
+        .add({ avail: 2, date: momentDate, rate: 170 })
+        .then(function () {
+          console.log("stdRoom Document successfully written!")
+        })
+        .catch(function (error) {
+          console.error("Error writing document: ", error)
+        })
+      momentDate = moment(momentDate).add(1, "d").startOf("day")._d
+      console.log(momentDate)
+      console.log("stdRoom , wait,,,3 sec")
+      if (momentDate >= moment("2021-01-01").startOf("day")._d) {
+        clearInterval(interval)
+        // momentDate = moment("2020-05-28").startOf("day")._d
+        // runSupRoom()
+      }
+    }, 3000)
 
     // const runSupRoom = () => {
     //   setTimeout(() => {
