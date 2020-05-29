@@ -69,13 +69,6 @@ const IndexPage = () => {
       return { ...prevState, loading: true }
     })
     reqView(state, setSearchState)
-    setTimeout(() => {
-      const elmntToView = document.getElementById("destination")
-      elmntToView.scrollIntoView({
-        behavior: "smooth",
-        inline: "center",
-      })
-    }, 1000)
   }
   console.log(state)
   return (
@@ -130,25 +123,12 @@ export const reqView = (state, setSearchState) => {
     .then(function (query) {
       query.forEach(function (doc) {
         if (doc.data().avail >= state.room) {
-          console.log(
-            "[FIREBASE] ",
-            doc.data(),
-            " = > ",
-            doc.data().date.toDate()
-          )
           let totalNight = moment
             .utc(state.departureDate)
             .diff(moment.utc(state.arrivalDate), "d")
 
           let totalPrice = totalNight * doc.data().rate * state.room
-          console.log(
-            "stdView room ",
-            state.room,
-            " rate ",
-            doc.data().rate,
-            "Total price ",
-            totalPrice
-          )
+
           setSearchState(prevState => {
             return {
               ...prevState,
@@ -169,7 +149,6 @@ export const reqView = (state, setSearchState) => {
               loading: false,
             }
           })
-          console.log("olalal")
         }
       })
     })
