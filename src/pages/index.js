@@ -73,7 +73,7 @@ const IndexPage = () => {
       const elmntToView = document.getElementById("destination")
       elmntToView.scrollIntoView({
         behavior: "smooth",
-        inline: "end",
+        inline: "center",
       })
     }, 1000)
   }

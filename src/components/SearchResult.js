@@ -27,10 +27,11 @@ const SearchResult = props => {
           className={animation.scaleInCenter}
           style={{ textAlign: "center", margin: "25px auto", padding: "10px" }}
         >
+          <div id="destination"></div>
           <StdRoom />
 
           <ParaContainer>
-            <h3 id="destination">Availability</h3>
+            <h3>Availability</h3>
             <hr style={{ width: "50%" }} />
             <p style={backGround}>Arrival Date : {props.arrivalDate}</p>
             <p style={backGround}>Departure Date : {props.departureDate}</p>
@@ -51,7 +52,7 @@ const SearchResult = props => {
           </ParaContainer>
         </section>
       ) : (
-        <h3 style={{ textAlign: "center", marginTop: "25px" }}>
+        <h3 style={({ textAlign: "center", marginTop: "25px" }, backGround)}>
           Sorry, no Availability
         </h3>
       )}

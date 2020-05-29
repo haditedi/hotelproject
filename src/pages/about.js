@@ -1,6 +1,5 @@
 import React from "react"
 import Layout from "../components/layout"
-import animation from "./animation.module.css"
 import AboutImg from "../components/images/AboutImg"
 import ParaContainer from "../components/ParaContainer"
 import HeadingText from "../components/HeadingText"
