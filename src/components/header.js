@@ -6,7 +6,6 @@ import Menu from "@material-ui/core/Menu"
 import MenuItem from "@material-ui/core/MenuItem"
 import { makeStyles } from "@material-ui/core/styles"
 import css from "./header.module.css"
-import { auth } from "../components/Firebase"
 
 const useStyles = makeStyles({
   root: {
@@ -29,9 +28,6 @@ const Header = props => {
     setAnchorEl(null)
   }
 
-  const handleLogOut = () => {
-    auth.signOut()
-  }
   return (
     <header className={classes.back}>
       <nav
@@ -83,7 +79,11 @@ const Header = props => {
           )}
 
           {props.userState ? (
-            <Link onClick={handleLogOut} to="/booking" className={css.navItem}>
+            <Link
+              onClick={props.handleLogOut}
+              to="/booking"
+              className={css.navItem}
+            >
               Log Out
             </Link>
           ) : (
@@ -148,7 +148,7 @@ const Header = props => {
             )}
 
             {props.userState ? (
-              <MenuItem onClick={handleLogOut}>
+              <MenuItem onClick={props.handleLogOut}>
                 {" "}
                 <Link to="/booking" state={{ logout: true }}>
                   Log Out

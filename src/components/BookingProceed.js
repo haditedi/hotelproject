@@ -4,6 +4,7 @@ import moment from "moment"
 import StdRoom from "./StdRoom"
 import Cards from "react-credit-cards"
 import classes from "./BookingProceed.module.css"
+import Input from "@material-ui/core/Input"
 
 const BookingProceed = props => {
   const [cardState, setCardState] = useState({
@@ -75,14 +76,22 @@ const BookingProceed = props => {
                 name={cardState.name}
                 number={cardState.number}
               />
-              <form autoComplete="true">
-                <input
+              <form>
+                <Input
                   type="tel"
                   name="number"
                   placeholder="Card Number"
                   onChange={handleInputChange}
                   onFocus={handleInputFocus}
+                  inputProps={{ "aria-label": "card number" }}
                 />
+                {/* <input
+                  type="tel"
+                  name="number"
+                  placeholder="Card Number"
+                  onChange={handleInputChange}
+                  onFocus={handleInputFocus}
+                /> */}
                 <input
                   type="text"
                   name="name"

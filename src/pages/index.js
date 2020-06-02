@@ -5,12 +5,13 @@ import SEO from "../components/seo"
 import SearchAvailability from "../components/SearchAvailability"
 import HeadingText from "../components/HeadingText"
 import moment from "moment"
-import { db } from "../components/Firebase"
+import useFirebase from "../components/Firebase"
 import SearchResult from "../components/SearchResult"
 import Spinner from "../components/Spinner"
 import { navigate } from "gatsby"
 
 const IndexPage = () => {
+  const firebase = useFirebase()
   const [state, setSearchState] = React.useState({
     room: 1,
     arrivalDate: moment.utc().startOf("d").format(),
@@ -119,7 +120,8 @@ export const reqView = (state, setSearchState) => {
   let startDate = moment(state.arrivalDate).startOf("d")._d
   let endDate = moment(state.departureDate).startOf("d")._d
 
-  const stdView = db
+  const stdView = firebase
+    .firestore()
     .collection("stdRoom")
     .where("date", ">=", startDate)
     .where("date", "<", endDate)

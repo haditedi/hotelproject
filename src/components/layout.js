@@ -3,13 +3,15 @@ import classes from "./layout.module.css"
 import { useStaticQuery, graphql } from "gatsby"
 import Header from "./header"
 import "./layout.css"
-import { auth } from "../components/Firebase"
+import useFirebase from "./useFirebase"
 
 const Layout = props => {
   const [userState, setUser] = useState({ user: " " })
+  const firebase = useFirebase()
 
   useEffect(() => {
-    auth.onAuthStateChanged(function (user) {
+    if (!firebase) return
+    firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         setUser(prevValue => {
           return {
@@ -26,7 +28,11 @@ const Layout = props => {
         })
       }
     })
-  }, [auth.currentUser])
+  }, [firebase])
+
+  const handleLogOut = () => {
+    firebase.auth().signOut()
+  }
 
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -41,7 +47,7 @@ const Layout = props => {
   return (
     <div className={classes.container}>
       <div className={classes.content}>
-        <Header userState={userState.user} />
+        <Header userState={userState.user} handleLogOut={handleLogOut} />
 
         <main>{props.children}</main>
       </div>

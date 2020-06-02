@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react"
 import Layout from "../components/layout"
 import SignUp from "../components/Users/SignUp"
-import { auth } from "../components/Firebase"
 import SignIn from "../components/Users/SignIn"
 import ParaContainer from "../components/ParaContainer"
 import Spinner from "../components/Spinner"
-import { db } from "../components/Firebase"
+import useFirebase from "../components/Firebase"
 import BookingProceed from "../components/BookingProceed"
 
 const Booking = ({ location }) => {
+  const firebase = useFirebase()
   const [userState, setUserState] = useState({
     email: "",
     password: "",
@@ -24,9 +24,11 @@ const Booking = ({ location }) => {
   const [showSignUp, setShowSignUp] = useState(false)
 
   useEffect(() => {
-    auth.onAuthStateChanged(function (user) {
+    firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
-        db.collection("users")
+        firebase
+          .firestore()
+          .collection("users")
           .where("email", "==", user.email)
           .get()
           .then(resp =>
@@ -64,7 +66,7 @@ const Booking = ({ location }) => {
         })
       }
     })
-  }, [auth.currentUser])
+  }, [firebase])
 
   const handleChange = event => {
     let name = event.target.name
@@ -96,11 +98,11 @@ const Booking = ({ location }) => {
         }
       })
     } else {
-      auth
+      firebase.auth
         .createUserWithEmailAndPassword(userState.email, userState.password)
         .then(resp => {
           console.log("[handleSingUp] ", resp)
-          db.collection("users").add({
+          firebase.firestore().collection("users").add({
             name: userState.userName,
             email: userState.email,
           })
@@ -144,14 +146,15 @@ const Booking = ({ location }) => {
         loading: true,
       }
     })
-    auth
+    firebase
+      .auth()
       .signInWithEmailAndPassword(userState.email, userState.password)
       .then(user => {
         console.log(user)
         setUserState(prevState => {
           return {
             ...prevState,
-            user: auth.currentUser,
+            user: firebase.auth().currentUser,
             password: "",
             error: false,
             errorMessage: "",
@@ -189,7 +192,7 @@ const Booking = ({ location }) => {
   }
 
   return (
-    <Layout user={auth.currentUser}>
+    <Layout>
       {userState.loading && <Spinner />}
       {showSignIn && (
         <div>
@@ -222,14 +225,14 @@ const Booking = ({ location }) => {
         </div>
       )}
 
-      {auth.currentUser && (
+      {userState.user && (
         <div style={{ textAlign: "center" }}>
           <ParaContainer>
             <h3>Welcome Back {userState.userName}</h3>
           </ParaContainer>
         </div>
       )}
-      {location.state && auth.currentUser ? (
+      {location.state && userState.user ? (
         <BookingProceed
           prevValue={location.state.state}
           email={userState.email}
