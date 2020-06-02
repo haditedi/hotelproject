@@ -6,7 +6,6 @@ const card = props => {
     <div className={classes.outer}>
       <div className={classes.container}>
         <section className={classes.imgCont}>{props.image}</section>
-
         <section className={classes.para}>{props.children}</section>
       </div>
     </div>

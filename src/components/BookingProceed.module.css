@@ -3,38 +3,28 @@
   flex-direction: column;
   margin: 25px;
   box-shadow: 0 3px 3px 3px #035aa6;
+
+  max-width: 700px;
 }
-.imgCont {
-  margin: 10px;
-}
-.para {
-  margin: 15px;
-  text-align: center;
-}
-.para ul {
-  list-style-type: none;
-  margin: 0 0 15px;
-  padding: 5px;
-}
-.para ul li {
-  padding: 5px;
-}
-.para h3 {
-  margin: 10px;
+.container p {
+  margin: 0;
+  padding: 15px;
+  margin-block-start: 0;
+  margin-block-end: 0;
 }
 
 @media (min-width: 770px) {
   .outer {
     display: flex;
     flex-direction: row;
-    padding: 10px;
+    flex-wrap: wrap;
+
     justify-content: center;
   }
   .container {
     width: 80vw;
-    flex-direction: row;
+
     padding: 10px;
-    max-width: 700px;
   }
   .imgCont {
     width: 50%;

@@ -2,24 +2,9 @@ import React, { useState, useEffect } from "react"
 import animation from "../pages/animation.module.css"
 import StdRoom from "./StdRoom"
 import ParaContainer from "./ParaContainer"
+import Button from "@material-ui/core/Button"
 
 const SearchResult = props => {
-  const [backGround, setBackground] = useState({ backgroundColor: "#40bad5" })
-  useEffect(() => {
-    setBackground({ backgroundColor: "yellow" })
-
-    setTimeout(() => {
-      setBackground({ backgroundColor: "#40bad5" })
-    }, 1500)
-    console.log("useEffect - result")
-  }, [
-    props.room,
-    props.arrivalDate,
-    props.departureDate,
-    props.totalNight,
-    props.rate,
-  ])
-
   return (
     <div>
       {props.available ? (
@@ -27,28 +12,38 @@ const SearchResult = props => {
           className={animation.scaleInCenter}
           style={{ textAlign: "center", margin: "25px auto", padding: "10px" }}
         >
-          <div id="destination"></div>
           <StdRoom />
 
           <ParaContainer>
             <h3>Availability</h3>
             <hr style={{ width: "50%" }} />
-            <p style={backGround}>Arrival Date : {props.arrivalDate}</p>
-            <p style={backGround}>Departure Date : {props.departureDate}</p>
-            <p style={backGround}>Rate / Night : £ {props.rate}</p>
-            <p style={backGround}>
+            <p>Arrival Date : {props.arrivalDate}</p>
+            <p>Departure Date : {props.departureDate}</p>
+            <p>Rate / Night : £ {props.rate}</p>
+            <p>
               Number of room{props.room > 1 && "s"} : {props.room}
             </p>
-            <p style={backGround}>
+            <p>
               Total Night{props.totalNight > 1 && "s"} : {props.totalNight}
             </p>
-            <p style={backGround}>
+            <p>
               Total Price :
               {props.totalPrice.toLocaleString("en-US", {
                 style: "currency",
                 currency: "GBP",
               })}
             </p>
+            {props.showButton && (
+              <Button
+                style={{ marginBottom: "20px" }}
+                id="bookButton"
+                variant="contained"
+                type="submit"
+                onClick={props.navigate}
+              >
+                Book Now
+              </Button>
+            )}
           </ParaContainer>
         </section>
       ) : (

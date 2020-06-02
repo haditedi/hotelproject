@@ -5,10 +5,10 @@ import SEO from "../components/seo"
 import SearchAvailability from "../components/SearchAvailability"
 import HeadingText from "../components/HeadingText"
 import moment from "moment"
-import animation from "./animation.module.css"
-import firebase from "../components/Firebase"
+import { db } from "../components/Firebase"
 import SearchResult from "../components/SearchResult"
 import Spinner from "../components/Spinner"
+import { navigate } from "gatsby"
 
 const IndexPage = () => {
   const [state, setSearchState] = React.useState({
@@ -36,10 +36,7 @@ const IndexPage = () => {
         }
       })
     }
-    if (state.rate > 0) {
-      reqView(state, setSearchState)
-    }
-  }, [state.arrivalDate, state.room, state.departureDate])
+  }, [state.arrivalDate, state.departureDate])
 
   const handleSearchChange = (event, param) => {
     try {
@@ -49,6 +46,7 @@ const IndexPage = () => {
         return {
           ...prevState,
           [nam]: val,
+          searchResult: false,
         }
       })
     } catch (e) {
@@ -58,6 +56,7 @@ const IndexPage = () => {
         return {
           ...prevState,
           [nam]: val,
+          searchResult: false,
         }
       })
     }
@@ -65,11 +64,17 @@ const IndexPage = () => {
 
   const handleSubmit = event => {
     event.preventDefault()
+
     setSearchState(prevState => {
       return { ...prevState, loading: true }
     })
     reqView(state, setSearchState)
   }
+
+  const handleNavigate = () => {
+    navigate("/booking/", { state: { state } })
+  }
+
   console.log(state)
   return (
     <Layout>
@@ -77,7 +82,9 @@ const IndexPage = () => {
       <div>
         <HeadingText>Hotel Paradise</HeadingText>
 
-        <Image className={animation.kenburnsTop} />
+        <Image />
+
+        {state.loading && <Spinner />}
 
         {state.searchResult && (
           <SearchResult
@@ -88,10 +95,10 @@ const IndexPage = () => {
             room={state.room}
             totalNight={state.totalNight}
             totalPrice={state.totalPrice}
+            navigate={handleNavigate}
+            showButton={true}
           />
         )}
-
-        {state.loading && <Spinner />}
 
         <SearchAvailability
           changeDate={handleSearchChange}
@@ -112,8 +119,7 @@ export const reqView = (state, setSearchState) => {
   let startDate = moment(state.arrivalDate).startOf("d")._d
   let endDate = moment(state.departureDate).startOf("d")._d
 
-  const stdView = firebase
-    .firestore()
+  const stdView = db
     .collection("stdRoom")
     .where("date", ">=", startDate)
     .where("date", "<", endDate)

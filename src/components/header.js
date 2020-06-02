@@ -6,6 +6,7 @@ import Menu from "@material-ui/core/Menu"
 import MenuItem from "@material-ui/core/MenuItem"
 import { makeStyles } from "@material-ui/core/styles"
 import css from "./header.module.css"
+import { auth } from "../components/Firebase"
 
 const useStyles = makeStyles({
   root: {
@@ -16,7 +17,7 @@ const useStyles = makeStyles({
   },
 })
 
-const Header = ({ siteTitle }) => {
+const Header = props => {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = React.useState(null)
 
@@ -28,6 +29,9 @@ const Header = ({ siteTitle }) => {
     setAnchorEl(null)
   }
 
+  const handleLogOut = () => {
+    auth.signOut()
+  }
   return (
     <header className={classes.back}>
       <nav
@@ -67,6 +71,30 @@ const Header = ({ siteTitle }) => {
           >
             Contact
           </Link>
+
+          {props.userState && (
+            <Link
+              to="/booking"
+              className={css.navItem}
+              activeClassName={css.activeNavItem}
+            >
+              Booking
+            </Link>
+          )}
+
+          {props.userState ? (
+            <Link onClick={handleLogOut} to="/booking" className={css.navItem}>
+              Log Out
+            </Link>
+          ) : (
+            <Link
+              to="/booking"
+              className={css.navItem}
+              activeClassName={css.activeNavItem}
+            >
+              Sign In/Up
+            </Link>
+          )}
         </div>
 
         <Box
@@ -77,7 +105,7 @@ const Header = ({ siteTitle }) => {
           mr="30px"
           display={{
             xs: "block",
-            sm: "none",
+            sm: "block",
             md: "none",
             lg: "none",
             xl: "none",
@@ -111,6 +139,27 @@ const Header = ({ siteTitle }) => {
               {" "}
               <Link to="/contact">Contact</Link>
             </MenuItem>
+
+            {props.userState && (
+              <MenuItem onClick={handleClose}>
+                {" "}
+                <Link to="/booking">Booking</Link>
+              </MenuItem>
+            )}
+
+            {props.userState ? (
+              <MenuItem onClick={handleLogOut}>
+                {" "}
+                <Link to="/booking" state={{ logout: true }}>
+                  Log Out
+                </Link>
+              </MenuItem>
+            ) : (
+              <MenuItem onClick={handleClose}>
+                {" "}
+                <Link to="/booking">Sign In/Up</Link>
+              </MenuItem>
+            )}
           </Menu>
         </Box>
       </nav>
