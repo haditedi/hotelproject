@@ -43,7 +43,7 @@ const Layout = props => {
       }
     }
   `)
-
+  console.log("[LAYOUT]", userState)
   return (
     <div className={classes.container}>
       <div className={classes.content}>

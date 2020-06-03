@@ -6,6 +6,7 @@ import ParaContainer from "../components/ParaContainer"
 import Spinner from "../components/Spinner"
 import useFirebase from "../components/Firebase"
 import BookingProceed from "../components/BookingProceed"
+import moment from "moment"
 
 const Booking = ({ location }) => {
   const firebase = useFirebase()
@@ -15,13 +16,24 @@ const Booking = ({ location }) => {
     error: false,
     errorMessage: "",
     user: "",
+    userId: "",
     userName: "",
     loading: false,
   })
-  console.log("[LOCATION] ", location.state)
 
   const [showSignIn, setShowSignIn] = useState(false)
   const [showSignUp, setShowSignUp] = useState(false)
+  const [cardState, setCardState] = useState({
+    expiry: "",
+    name: "",
+    number: "",
+  })
+
+  let state
+  try {
+    state = location.state.state
+    console.log("STATE", state)
+  } catch {}
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -39,6 +51,7 @@ const Booking = ({ location }) => {
                   user: user,
                   userName: doc.data().name,
                   email: doc.data().email,
+                  userId: doc.id,
                 }
               })
             })
@@ -47,7 +60,7 @@ const Booking = ({ location }) => {
 
         console.log(user.email)
         console.log("[FIREBASE] ", user)
-
+        console.log("[STATE YAAA]")
         setShowSignUp(false)
         setShowSignIn(false)
       } else {
@@ -98,7 +111,8 @@ const Booking = ({ location }) => {
         }
       })
     } else {
-      firebase.auth
+      firebase
+        .auth()
         .createUserWithEmailAndPassword(userState.email, userState.password)
         .then(resp => {
           console.log("[handleSingUp] ", resp)
@@ -163,8 +177,6 @@ const Booking = ({ location }) => {
         })
       })
       .catch(function (error) {
-        // Handle Errors here.
-        var errorCode = error.code
         var errorMessage = error.message
         setUserState(prevState => {
           return {
@@ -178,7 +190,6 @@ const Booking = ({ location }) => {
         // ...
       })
   }
-  console.log("[USERSTATE] ", userState)
 
   const handleShow = () => {
     setShowSignUp(!showSignUp)
@@ -189,6 +200,62 @@ const Booking = ({ location }) => {
         error: false,
       }
     })
+  }
+
+  const handleCardChange = e => {
+    const { name, value } = e.target
+    setCardState(prevValue => {
+      return { ...prevValue, [name]: value }
+    })
+  }
+
+  const handleCardSubmit = e => {
+    e.preventDefault()
+
+    let batch = firebase.firestore().batch()
+    let std = firebase.firestore().collection("stdRoom")
+    let stdView = firebase
+      .firestore()
+      .collection("stdRoom")
+      .where("date", ">=", moment(state.arrivalDate).startOf("d")._d)
+      .where("date", "<", moment(state.departureDate).startOf("d")._d)
+
+    stdView
+      .get()
+      .then(resp => {
+        resp.forEach(doc => {
+          if (doc.data().avail >= state.room) {
+            batch.update(std.doc(doc.id), {
+              avail: doc.data().avail - state.room,
+            })
+          } else {
+            console.log("not enough availability")
+          }
+        })
+        batch
+          .commit()
+          .then(() => console.log("batch commit"))
+          .catch(() => console.log("cannot write"))
+
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(userState.userId)
+          .collection("bookingList")
+          .add({
+            arrival: state.arrivalDate,
+            departure: state.departureDate,
+            ratePerNightPerRoom: state.rate,
+            totalNight: state.totalNight,
+            totalPrice: state.totalPrice,
+            cardName: cardState.name,
+            cardNumber: cardState.number,
+            cardExpiry: cardState.expiry,
+          })
+          .then(resp => console.log("success", resp.id))
+          .catch(err => console.log(err))
+      })
+      .catch(err => console.log(err))
   }
 
   return (
@@ -234,8 +301,11 @@ const Booking = ({ location }) => {
       )}
       {location.state && userState.user ? (
         <BookingProceed
-          prevValue={location.state.state}
-          email={userState.email}
+          state={location.state.state}
+          userState={userState}
+          cardState={cardState}
+          handleCardChange={handleCardChange}
+          handleCardSubmit={handleCardSubmit}
         />
       ) : null}
     </Layout>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import animation from "../pages/animation.module.css"
 import StdRoom from "./StdRoom"
 import ParaContainer from "./ParaContainer"

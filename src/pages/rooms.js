@@ -1,7 +1,5 @@
 import React from "react"
 import Layout from "../components/layout"
-import animation from "./animation.module.css"
-import SEO from "../components/seo"
 import Card from "../components/card"
 import StandardRoom from "../components/images/standard-room"
 import SuperiorRoom from "../components/images/superior-room"

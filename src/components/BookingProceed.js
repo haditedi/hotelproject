@@ -1,41 +1,25 @@
-import React, { useState } from "react"
-import "react-credit-cards/es/styles-compiled.css"
+import React from "react"
 import moment from "moment"
 import StdRoom from "./StdRoom"
-import Cards from "react-credit-cards"
 import classes from "./BookingProceed.module.css"
-import Input from "@material-ui/core/Input"
+import TextField from "@material-ui/core/TextField"
+import Button from "@material-ui/core/Button"
 
-const BookingProceed = props => {
-  const [cardState, setCardState] = useState({
-    cvc: "",
-    expiry: "",
-    focus: "",
-    name: "",
-    number: "",
-  })
-  const state = props.prevValue
-
-  const handleInputFocus = e => {
-    const name = e.target.name
-    setCardState(prevValue => {
-      return { ...prevValue, focus: name }
-    })
-  }
-
-  const handleInputChange = e => {
-    const { name, value } = e.target
-    setCardState(prevValue => {
-      return { ...prevValue, [name]: value }
-    })
-  }
-
+const BookingProceed = ({
+  state,
+  userState,
+  handleCardChange,
+  handleCardSubmit,
+  cardState,
+}) => {
   return (
     <div className={classes.outer}>
       {state && (
         <>
           <section className={classes.container}>
-            <p style={{ display: "block" }}>Proceeding with your booking</p>
+            <p>
+              <b>Proceeding with your current query ?</b>
+            </p>
 
             <p>
               Arrival Date: {moment(state.arrivalDate).format("Do MMM YYYY")},
@@ -54,67 +38,60 @@ const BookingProceed = props => {
                 currency: "GBP",
               })}
             </p>
-            <p>Your email: {props.email}</p>
+            <p>Your email: {userState.email}</p>
 
-            {/* <SearchResult
-            style={{ margin: "0" }}
-            available={state.available}
-            arrivalDate={moment(state.arrivalDate).format("Do MMM YYYY")}
-            departureDate={moment(state.departureDate).format("Do MMM YYYY")}
-            rate={state.rate}
-            room={state.room}
-            totalNight={state.totalNight}
-            totalPrice={state.totalPrice}
-            navigate={false}
-            showButton={false}
-          /> */}
-            <div id="PaymentForm">
-              <Cards
-                cvc={cardState.cvc}
-                expiry={cardState.expiry}
-                focused={cardState.focus}
-                name={cardState.name}
-                number={cardState.number}
+            <form>
+              <p>
+                Credit card info:{" "}
+                <b style={{ color: "red" }}>Testing mode - no validation</b>
+              </p>
+              <TextField
+                style={{ margin: "5px" }}
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                onChange={handleCardChange}
+                value={cardState.name}
+                variant="outlined"
+                inputProps={{ "aria-label": "card name" }}
               />
-              <form>
-                <Input
-                  type="tel"
-                  name="number"
-                  placeholder="Card Number"
-                  onChange={handleInputChange}
-                  onFocus={handleInputFocus}
-                  inputProps={{ "aria-label": "card number" }}
-                />
-                {/* <input
-                  type="tel"
-                  name="number"
-                  placeholder="Card Number"
-                  onChange={handleInputChange}
-                  onFocus={handleInputFocus}
-                /> */}
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Your name"
-                  onChange={handleInputChange}
-                  onFocus={handleInputFocus}
-                />
-                <input
-                  type="tel"
-                  name="expiry"
-                  placeholder="Expiry Date"
-                  onChange={handleInputChange}
-                  onFocus={handleInputFocus}
-                />
-                <input
-                  type="num"
-                  name="cvc"
-                  placeholder="CVC"
-                  onChange={handleInputChange}
-                  onFocus={handleInputFocus}
-                />
-              </form>
-            </div>
+              <TextField
+                style={{ margin: "5px" }}
+                type="tel"
+                name="number"
+                placeholder="Card Number"
+                onChange={handleCardChange}
+                value={cardState.number}
+                variant="outlined"
+                inputProps={{ "aria-label": "card number" }}
+              />
+              <TextField
+                style={{ width: "100px", margin: "5px" }}
+                type="tel"
+                name="expiry"
+                placeholder="Exp Date"
+                onChange={handleCardChange}
+                value={cardState.expiry}
+                variant="outlined"
+                inputProps={{ "aria-label": "card expiry" }}
+              />
+              <p style={{ padding: "15px 15px 5px" }}>
+                <b>Terms and Conditions</b>
+              </p>
+              <p style={{ padding: "5px 15px 15px" }}>
+                Cancellation policy is 1 day before arrival day at no charge
+                otherwise 1 day charge apply.
+              </p>
+              <Button
+                style={{ margin: "20px 15px" }}
+                id="bookButton"
+                variant="contained"
+                type="submit"
+                onClick={handleCardSubmit}
+              >
+                Looks good. Please book this.
+              </Button>
+            </form>
           </section>
           <StdRoom />
         </>
