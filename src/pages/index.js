@@ -5,7 +5,7 @@ import SEO from "../components/seo"
 import SearchAvailability from "../components/SearchAvailability"
 import HeadingText from "../components/HeadingText"
 import moment from "moment"
-import useFirebase from "../components/Firebase"
+import useFirebase from "../components/useFirebase"
 import SearchResult from "../components/SearchResult"
 import Spinner from "../components/Spinner"
 import { navigate } from "gatsby"
@@ -76,6 +76,53 @@ const IndexPage = () => {
     navigate("/booking/", { state: { state } })
   }
 
+  const reqView = (state, setSearchState) => {
+    let startDate = moment(state.arrivalDate).startOf("d")._d
+    let endDate = moment(state.departureDate).startOf("d")._d
+
+    const stdView = firebase
+      .firestore()
+      .collection("stdRoom")
+      .where("date", ">=", startDate)
+      .where("date", "<", endDate)
+
+    stdView
+      .get()
+      .then(function (query) {
+        query.forEach(function (doc) {
+          if (doc.data().avail >= state.room) {
+            let totalNight = moment
+              .utc(state.departureDate)
+              .diff(moment.utc(state.arrivalDate), "d")
+
+            let totalPrice = totalNight * doc.data().rate * state.room
+
+            setSearchState(prevState => {
+              return {
+                ...prevState,
+                searchResult: true,
+                available: true,
+                rate: doc.data().rate,
+                totalNight: totalNight,
+                totalPrice: totalPrice,
+                loading: false,
+              }
+            })
+          } else {
+            setSearchState(prevState => {
+              return {
+                ...prevState,
+                searchResult: true,
+                available: false,
+                loading: false,
+              }
+            })
+          }
+        })
+      })
+      .catch(err => console.log("error", err))
+  }
+
   console.log(state)
   return (
     <Layout>
@@ -115,50 +162,3 @@ const IndexPage = () => {
 }
 
 export default IndexPage
-
-export const reqView = (state, setSearchState) => {
-  let startDate = moment(state.arrivalDate).startOf("d")._d
-  let endDate = moment(state.departureDate).startOf("d")._d
-
-  const stdView = firebase
-    .firestore()
-    .collection("stdRoom")
-    .where("date", ">=", startDate)
-    .where("date", "<", endDate)
-
-  stdView
-    .get()
-    .then(function (query) {
-      query.forEach(function (doc) {
-        if (doc.data().avail >= state.room) {
-          let totalNight = moment
-            .utc(state.departureDate)
-            .diff(moment.utc(state.arrivalDate), "d")
-
-          let totalPrice = totalNight * doc.data().rate * state.room
-
-          setSearchState(prevState => {
-            return {
-              ...prevState,
-              searchResult: true,
-              available: true,
-              rate: doc.data().rate,
-              totalNight: totalNight,
-              totalPrice: totalPrice,
-              loading: false,
-            }
-          })
-        } else {
-          setSearchState(prevState => {
-            return {
-              ...prevState,
-              searchResult: true,
-              available: false,
-              loading: false,
-            }
-          })
-        }
-      })
-    })
-    .catch(err => console.log("error", err))
-}
