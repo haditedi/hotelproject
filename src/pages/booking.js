@@ -295,7 +295,7 @@ const Booking = ({ location }) => {
       {userState.user && (
         <div style={{ textAlign: "center" }}>
           <ParaContainer>
-            <h3>Welcome Back {userState.userName}</h3>
+            <h3>Welcome {userState.userName}</h3>
           </ParaContainer>
         </div>
       )}
