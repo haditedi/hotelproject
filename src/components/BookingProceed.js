@@ -14,88 +14,85 @@ const BookingProceed = ({
 }) => {
   return (
     <div className={classes.outer}>
-      {state && (
-        <>
-          <section className={classes.container}>
-            <p>
-              <b>Proceeding with your current query ?</b>
-            </p>
+      <>
+        <section className={classes.container}>
+          <p>
+            <b>Proceeding with your current query ?</b>
+          </p>
 
-            <p>
-              Arrival Date: {moment(state.arrivalDate).format("Do MMM YYYY")},
-              Departure Date:{" "}
-              {moment(state.departureDate).format("Do MMM YYYY")}
-            </p>
-            <p>
-              Number of room{state.room > 1 && "s"} : {state.room}
-            </p>
-            <p>Rate/night/room : £{state.rate} </p>
-            <p>Total Night : {state.totalNight}</p>
-            <p>
-              Total :{" "}
-              {state.totalPrice.toLocaleString("en-US", {
-                style: "currency",
-                currency: "GBP",
-              })}
-            </p>
-            <p>Your email: {userState.email}</p>
+          <p>
+            Arrival Date: {moment(state.arrivalDate).format("Do MMM YYYY")},
+            Departure Date: {moment(state.departureDate).format("Do MMM YYYY")}
+          </p>
+          <p>
+            Number of room{state.room > 1 && "s"} : {state.room}
+          </p>
+          <p>Rate/night/room : £{state.rate} </p>
+          <p>Total Night : {state.totalNight}</p>
+          <p>
+            Total :{" "}
+            {state.totalPrice.toLocaleString("en-US", {
+              style: "currency",
+              currency: "GBP",
+            })}
+          </p>
+          <p>Your email: {userState.email}</p>
 
-            <form>
-              <p>
-                Credit card info:{" "}
-                <b style={{ color: "red" }}>Testing mode - no validation</b>
-              </p>
-              <TextField
-                style={{ margin: "5px" }}
-                type="text"
-                name="name"
-                placeholder="Full Name"
-                onChange={handleCardChange}
-                value={cardState.name}
-                variant="outlined"
-                inputProps={{ "aria-label": "card name" }}
-              />
-              <TextField
-                style={{ margin: "5px" }}
-                type="tel"
-                name="number"
-                placeholder="Card Number"
-                onChange={handleCardChange}
-                value={cardState.number}
-                variant="outlined"
-                inputProps={{ "aria-label": "card number" }}
-              />
-              <TextField
-                style={{ width: "100px", margin: "5px" }}
-                type="tel"
-                name="expiry"
-                placeholder="Exp Date"
-                onChange={handleCardChange}
-                value={cardState.expiry}
-                variant="outlined"
-                inputProps={{ "aria-label": "card expiry" }}
-              />
-              <p style={{ padding: "15px 15px 5px" }}>
-                <b>Terms and Conditions</b>
-              </p>
-              <p style={{ padding: "5px 15px 15px" }}>
-                Cancellation policy is 1 day before arrival day at no charge
-                otherwise 1 day charge apply.
-              </p>
-              <Button
-                style={{ margin: "20px 15px" }}
-                id="bookButton"
-                variant="contained"
-                type="submit"
-                onClick={handleCardSubmit}
-              >
-                Looks good. Please book this.
-              </Button>
-            </form>
-          </section>
-          <StdRoom />
-        </>
-      )}
+          <form>
+            <p>
+              Credit card info:{" "}
+              <b style={{ color: "red" }}>Testing mode - no validation</b>
+            </p>
+            <TextField
+              style={{ margin: "5px" }}
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              onChange={handleCardChange}
+              value={cardState.name}
+              variant="outlined"
+              inputProps={{ "aria-label": "card name" }}
+            />
+            <TextField
+              style={{ margin: "5px" }}
+              type="tel"
+              name="number"
+              placeholder="Card Number"
+              onChange={handleCardChange}
+              value={cardState.number}
+              variant="outlined"
+              inputProps={{ "aria-label": "card number" }}
+            />
+            <TextField
+              style={{ width: "100px", margin: "5px" }}
+              type="tel"
+              name="expiry"
+              placeholder="Exp Date"
+              onChange={handleCardChange}
+              value={cardState.expiry}
+              variant="outlined"
+              inputProps={{ "aria-label": "card expiry" }}
+            />
+            <p style={{ padding: "15px 15px 5px" }}>
+              <b>Terms and Conditions</b>
+            </p>
+            <p style={{ padding: "5px 15px 15px" }}>
+              Cancellation policy is 1 day before arrival day at no charge
+              otherwise 1 day charge apply.
+            </p>
+            <Button
+              style={{ margin: "20px 15px" }}
+              id="bookButton"
+              variant="contained"
+              type="submit"
+              onClick={handleCardSubmit}
+            >
+              Looks good. Please book this.
+            </Button>
+          </form>
+        </section>
+        <StdRoom />
+      </>
     </div>
   )
 }

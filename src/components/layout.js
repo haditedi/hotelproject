@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import classes from "./layout.module.css"
 import { useStaticQuery, graphql } from "gatsby"
 import Header from "./header"
 import "./layout.css"
 import useFirebase from "./useFirebase"
+import moment from "moment"
+import { GlobalSetSearchContext } from "../context/GlobalContextProvider"
 
 const Layout = props => {
+  const setSearchState = useContext(GlobalSetSearchContext)
   const [userState, setUser] = useState({ user: " " })
   const firebase = useFirebase()
 
@@ -32,6 +35,20 @@ const Layout = props => {
 
   const handleLogOut = () => {
     firebase.auth().signOut()
+    setSearchState(prevValue => {
+      return {
+        ...prevValue,
+        room: 1,
+        arrivalDate: moment.utc().startOf("d").format(),
+        departureDate: moment.utc().startOf("d").add(1, "days").format(),
+        searchResult: false,
+        available: false,
+        loading: false,
+        rate: 0,
+        totalNight: 0,
+        totalPrice: 0,
+      }
+    })
   }
 
   const data = useStaticQuery(graphql`
@@ -43,7 +60,7 @@ const Layout = props => {
       }
     }
   `)
-  console.log("[LAYOUT]", userState)
+
   return (
     <div className={classes.container}>
       <div className={classes.content}>

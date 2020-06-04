@@ -17,6 +17,7 @@ const useStyles = makeStyles(theme => ({
 
 const SignUp = props => {
   const classes = useStyles()
+
   return (
     <div className={animation.scaleInCenter}>
       <ParaContainer>

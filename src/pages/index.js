@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useContext } from "react"
 import Layout from "../components/layout"
 import Image from "../components/images/image"
 import SEO from "../components/seo"
@@ -9,20 +9,28 @@ import useFirebase from "../components/useFirebase"
 import SearchResult from "../components/SearchResult"
 import Spinner from "../components/Spinner"
 import { navigate } from "gatsby"
+import {
+  GlobalStateContext,
+  GlobalSetSearchContext,
+} from "../context/GlobalContextProvider"
 
 const IndexPage = () => {
+  const state = useContext(GlobalStateContext)
+  const setSearchState = useContext(GlobalSetSearchContext)
+
   const firebase = useFirebase()
-  const [state, setSearchState] = React.useState({
-    room: 1,
-    arrivalDate: moment.utc().startOf("d").format(),
-    departureDate: moment.utc().startOf("d").add(1, "days").format(),
-    searchResult: false,
-    available: false,
-    loading: false,
-    rate: 0,
-    totalNight: 0,
-    totalPrice: 0,
-  })
+
+  // const [searchState, setSearchState] = React.useState({
+  //   room: 1,
+  //   arrivalDate: moment.utc().startOf("d").format(),
+  //   departureDate: moment.utc().startOf("d").add(1, "days").format(),
+  //   searchResult: false,
+  //   available: false,
+  //   loading: false,
+  //   rate: 0,
+  //   totalNight: 0,
+  //   totalPrice: 0,
+  // })
 
   useEffect(() => {
     if (state.arrivalDate >= state.departureDate) {
@@ -73,7 +81,7 @@ const IndexPage = () => {
   }
 
   const handleNavigate = () => {
-    navigate("/booking/", { state: { state } })
+    navigate("/booking")
   }
 
   const reqView = (state, setSearchState) => {
@@ -144,7 +152,6 @@ const IndexPage = () => {
             totalNight={state.totalNight}
             totalPrice={state.totalPrice}
             navigate={handleNavigate}
-            showButton={true}
           />
         )}
 

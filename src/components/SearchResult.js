@@ -33,17 +33,16 @@ const SearchResult = props => {
                 currency: "GBP",
               })}
             </p>
-            {props.showButton && (
-              <Button
-                style={{ marginBottom: "20px" }}
-                id="bookButton"
-                variant="contained"
-                type="submit"
-                onClick={props.navigate}
-              >
-                Book Now
-              </Button>
-            )}
+
+            <Button
+              style={{ marginBottom: "20px" }}
+              id="bookButton"
+              variant="contained"
+              type="submit"
+              onClick={props.navigate}
+            >
+              Book Now
+            </Button>
           </ParaContainer>
         </section>
       ) : (

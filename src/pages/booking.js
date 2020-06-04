@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import Layout from "../components/layout"
 import SignUp from "../components/Users/SignUp"
 import SignIn from "../components/Users/SignIn"
@@ -7,8 +7,11 @@ import Spinner from "../components/Spinner"
 import useFirebase from "../components/Firebase"
 import BookingProceed from "../components/BookingProceed"
 import moment from "moment"
+import { GlobalStateContext } from "../context/GlobalContextProvider"
 
-const Booking = ({ location }) => {
+const Booking = () => {
+  const state = useContext(GlobalStateContext)
+
   const firebase = useFirebase()
   const [userState, setUserState] = useState({
     email: "",
@@ -19,8 +22,9 @@ const Booking = ({ location }) => {
     userId: "",
     userName: "",
     loading: false,
+    showBookingProceed: false,
   })
-
+  console.log("[USERSTATE]", userState)
   const [showSignIn, setShowSignIn] = useState(false)
   const [showSignUp, setShowSignUp] = useState(false)
   const [cardState, setCardState] = useState({
@@ -29,11 +33,7 @@ const Booking = ({ location }) => {
     number: "",
   })
 
-  let state
-  try {
-    state = location.state.state
-    console.log("STATE", state)
-  } catch {}
+  console.log("[BOOKING]", state)
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -52,6 +52,7 @@ const Booking = ({ location }) => {
                   userName: doc.data().name,
                   email: doc.data().email,
                   userId: doc.id,
+                  showBookingProceed: true,
                 }
               })
             })
@@ -60,12 +61,13 @@ const Booking = ({ location }) => {
 
         console.log(user.email)
         console.log("[FIREBASE] ", user)
-        console.log("[STATE YAAA]")
+
         setShowSignUp(false)
         setShowSignIn(false)
       } else {
         console.log("not signed in")
         setShowSignIn(true)
+
         setUserState(prevValue => {
           return {
             ...prevValue,
@@ -75,6 +77,7 @@ const Booking = ({ location }) => {
             errorMessage: "",
             user: "",
             userName: "",
+            showBookingProceed: false,
           }
         })
       }
@@ -299,9 +302,9 @@ const Booking = ({ location }) => {
           </ParaContainer>
         </div>
       )}
-      {location.state && userState.user ? (
+      {userState.showBookingProceed ? (
         <BookingProceed
-          state={location.state.state}
+          state={state}
           userState={userState}
           cardState={cardState}
           handleCardChange={handleCardChange}
