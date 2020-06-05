@@ -20,20 +20,14 @@ const IndexPage = () => {
 
   const firebase = useFirebase()
 
-  // const [searchState, setSearchState] = React.useState({
-  //   room: 1,
-  //   arrivalDate: moment.utc().startOf("d").format(),
-  //   departureDate: moment.utc().startOf("d").add(1, "days").format(),
-  //   searchResult: false,
-  //   available: false,
-  //   loading: false,
-  //   rate: 0,
-  //   totalNight: 0,
-  //   totalPrice: 0,
-  // })
+  console.log(state.room)
+  const arrive = state.arrivalDate
+  const depart = state.departureDate
+  console.log(state)
 
   useEffect(() => {
     if (state.arrivalDate >= state.departureDate) {
+      console.log("EFFECT")
       setSearchState(prevState => {
         return {
           ...prevState,
@@ -45,7 +39,7 @@ const IndexPage = () => {
         }
       })
     }
-  }, [state.arrivalDate, state.departureDate])
+  }, [arrive, depart])
 
   const handleSearchChange = (event, param) => {
     try {
@@ -131,7 +125,6 @@ const IndexPage = () => {
       .catch(err => console.log("error", err))
   }
 
-  console.log(state)
   return (
     <Layout>
       <SEO title="Home" />
