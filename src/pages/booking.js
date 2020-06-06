@@ -87,6 +87,10 @@ const Booking = () => {
     })
   }, [firebase])
 
+  useEffect(() => {
+    firebase.firestore
+  })
+
   const handleChange = event => {
     let name = event.target.name
     let value = event.target.value
