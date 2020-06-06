@@ -20,7 +20,6 @@ const IndexPage = () => {
 
   const firebase = useFirebase()
 
-  console.log(state.room)
   const arrive = state.arrivalDate
   const depart = state.departureDate
   console.log(state)
@@ -91,6 +90,7 @@ const IndexPage = () => {
     stdView
       .get()
       .then(function (query) {
+        let avail = true
         query.forEach(function (doc) {
           if (doc.data().avail >= state.room) {
             let totalNight = moment
@@ -111,16 +111,22 @@ const IndexPage = () => {
               }
             })
           } else {
-            setSearchState(prevState => {
-              return {
-                ...prevState,
-                searchResult: true,
-                available: false,
-                loading: false,
-              }
-            })
+            avail = false
           }
         })
+        if (!avail) {
+          setSearchState(prevState => {
+            return {
+              ...prevState,
+              searchResult: true,
+              available: false,
+              loading: false,
+              rate: 0,
+              totalNight: 0,
+              totalPrice: 0,
+            }
+          })
+        }
       })
       .catch(err => console.log("error", err))
   }

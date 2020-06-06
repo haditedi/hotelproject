@@ -8,6 +8,9 @@ import useFirebase from "../components/Firebase"
 import BookingProceed from "../components/BookingProceed"
 import moment from "moment"
 import { GlobalStateContext } from "../context/GlobalContextProvider"
+import BookingList from "../components/BookingList"
+
+//todo ==> Need to add unsubscribe listener
 
 const Booking = () => {
   const state = useContext(GlobalStateContext)
@@ -34,12 +37,14 @@ const Booking = () => {
     name: "",
     number: "",
   })
+  const [bookingList, setBookingList] = useState([])
 
-  console.log("[BOOKING]", state)
+  console.log("[SEARCHSTATE]", state)
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
+        console.log(user)
         firebase
           .firestore()
           .collection("users")
@@ -61,7 +66,6 @@ const Booking = () => {
           )
           .catch(err => console.log(err))
 
-        console.log(user.email)
         console.log("[FIREBASE] ", user)
 
         setShowSignUp(false)
@@ -69,7 +73,7 @@ const Booking = () => {
       } else {
         console.log("not signed in")
         setShowSignIn(true)
-
+        setBookingList([])
         setUserState(prevValue => {
           return {
             ...prevValue,
@@ -88,9 +92,35 @@ const Booking = () => {
   }, [firebase])
 
   useEffect(() => {
-    firebase.firestore
-  })
+    if (userState.userId) {
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(userState.userId)
+        .collection("bookingList")
+        .onSnapshot(resp => {
+          let result = []
+          resp.forEach(doc => {
+            let obj = doc.data()
+            obj.confirmation = doc.id
+            result.push(obj)
+          })
+          setBookingList(result)
+        })
 
+      // .get()
+      // .then(resp => {
+      //   resp.forEach(doc => {
+      //     let result = doc.data()
+      //     result.confirmation = doc.id
+      //     setBookingList(prevValue => [...prevValue, result])
+      //   })
+      // })
+      // .catch(err => console.log(err))
+    }
+  }, [userState.user, userState.showBookingProceed])
+
+  console.log("BOOKINGLIST", bookingList)
   const handleChange = event => {
     let name = event.target.name
     let value = event.target.value
@@ -105,6 +135,7 @@ const Booking = () => {
 
   const handleSignUp = event => {
     event.preventDefault()
+    setBookingList([])
     setUserState(prevState => {
       return {
         ...prevState,
@@ -165,6 +196,7 @@ const Booking = () => {
 
   const handleSignIn = event => {
     event.preventDefault()
+    setBookingList([])
     setUserState(prevState => {
       return {
         ...prevState,
@@ -283,18 +315,18 @@ const Booking = () => {
               cardExpiry: cardState.expiry,
               errorMessage: userState.errorMessage,
             })
+            .then(resp => console.log("success", resp.id))
+            .catch(err => console.log(err))
           setUserState(prevState => {
             return {
               ...prevState,
               loading: false,
               error: false,
               errorMessage: "",
-
               showBookingProceed: false,
             }
           })
-            .then(resp => console.log("success", resp.id))
-            .catch(err => console.log(err))
+          setBookingList([])
         }
       })
 
@@ -312,16 +344,17 @@ const Booking = () => {
     })
   }
 
-  // const result = []
-  // db.collection(`/users/${userState.userId}/bookingList`)
-  //   .get()
-  //   .then(resp => {
-  //     resp.forEach(doc => {
-  //       result.push(doc.data())
-  //     })
-  //   })
-  //   .catch(err => console.log(err))
-  // console.log("RESULT", result)
+  const handleCancelBooking = e => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(userState.userId)
+      .collection("bookingList")
+      .doc(e)
+      .delete()
+      .then(() => console.log("deleted"))
+      .catch(() => console.log("error deleting"))
+  }
 
   return (
     <Layout>
@@ -377,6 +410,23 @@ const Booking = () => {
           errorMessage={userState.errorMessage}
         />
       ) : null}
+
+      {bookingList && userState.user
+        ? bookingList.map(item => {
+            return (
+              <BookingList
+                key={item.confirmation}
+                confirmation={item.confirmation}
+                arrivalDate={moment(item.arrival).format("Do MMM YYYY")}
+                departureDate={moment(item.departure).format("Do MMM YYYY")}
+                totalNight={item.totalNight}
+                ratePerNight={item.ratePerNightPerRoom}
+                totalPrice={item.totalPrice}
+                cancel={() => handleCancelBooking(item.confirmation)}
+              />
+            )
+          })
+        : null}
     </Layout>
   )
 }
