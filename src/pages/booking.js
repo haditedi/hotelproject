@@ -8,13 +8,12 @@ import useFirebase from "../components/Firebase"
 import BookingProceed from "../components/BookingProceed"
 import moment from "moment"
 import { GlobalStateContext } from "../context/GlobalContextProvider"
-import Error from "../components/Error"
 
 const Booking = () => {
   const state = useContext(GlobalStateContext)
 
   const firebase = useFirebase()
-  const db = firebase.firestore()
+
   const [userState, setUserState] = useState({
     email: "",
     password: "",
@@ -123,7 +122,7 @@ const Booking = () => {
         .createUserWithEmailAndPassword(userState.email, userState.password)
         .then(resp => {
           console.log("[handleSingUp] ", resp)
-          db.collection("users").doc(resp.user.uid).set({
+          firebase.firestore().collection("users").doc(resp.user.uid).set({
             name: userState.userName,
             email: userState.email,
             userId: resp.user.uid,
@@ -225,8 +224,8 @@ const Booking = () => {
       }
     })
 
-    const batch = db.batch()
-    const std = db.collection("stdRoom")
+    const batch = firebase.firestore().batch()
+    const std = firebase.firestore().collection("stdRoom")
     const stdView = firebase
       .firestore()
       .collection("stdRoom")
@@ -264,7 +263,9 @@ const Booking = () => {
             .then(() => console.log("batch commit"))
             .catch(() => console.log("cannot write"))
 
-          db.collection("users")
+          firebase
+            .firestore()
+            .collection("users")
             .doc(userState.userId)
             .collection("bookingList")
             .add({
