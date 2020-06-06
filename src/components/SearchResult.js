@@ -46,7 +46,7 @@ const SearchResult = props => {
           </ParaContainer>
         </section>
       ) : (
-        <h3 style={{ textAlign: "center", marginTop: "25px" }}>
+        <h3 style={{ textAlign: "center", marginTop: "25px", color: "red" }}>
           Sorry, no Availability
         </h3>
       )}

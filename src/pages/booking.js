@@ -8,11 +8,13 @@ import useFirebase from "../components/Firebase"
 import BookingProceed from "../components/BookingProceed"
 import moment from "moment"
 import { GlobalStateContext } from "../context/GlobalContextProvider"
+import Error from "../components/Error"
 
 const Booking = () => {
   const state = useContext(GlobalStateContext)
 
   const firebase = useFirebase()
+  const db = firebase.firestore()
   const [userState, setUserState] = useState({
     email: "",
     password: "",
@@ -25,6 +27,7 @@ const Booking = () => {
     showBookingProceed: false,
   })
   console.log("[USERSTATE]", userState)
+
   const [showSignIn, setShowSignIn] = useState(false)
   const [showSignUp, setShowSignUp] = useState(false)
   const [cardState, setCardState] = useState({
@@ -51,7 +54,7 @@ const Booking = () => {
                   user: user,
                   userName: doc.data().name,
                   email: doc.data().email,
-                  userId: doc.id,
+                  userId: user.uid,
                   showBookingProceed: true,
                 }
               })
@@ -77,6 +80,7 @@ const Booking = () => {
             errorMessage: "",
             user: "",
             userName: "",
+            userId: "",
             showBookingProceed: false,
           }
         })
@@ -119,9 +123,10 @@ const Booking = () => {
         .createUserWithEmailAndPassword(userState.email, userState.password)
         .then(resp => {
           console.log("[handleSingUp] ", resp)
-          firebase.firestore().collection("users").add({
+          db.collection("users").doc(resp.user.uid).set({
             name: userState.userName,
             email: userState.email,
+            userId: resp.user.uid,
           })
 
           setUserState(prevState => {
@@ -167,11 +172,10 @@ const Booking = () => {
       .auth()
       .signInWithEmailAndPassword(userState.email, userState.password)
       .then(user => {
-        console.log(user)
+        console.log("[SIGN IN]", user)
         setUserState(prevState => {
           return {
             ...prevState,
-            user: firebase.auth().currentUser,
             password: "",
             error: false,
             errorMessage: "",
@@ -214,10 +218,16 @@ const Booking = () => {
 
   const handleCardSubmit = e => {
     e.preventDefault()
+    setUserState(prevState => {
+      return {
+        ...prevState,
+        loading: true,
+      }
+    })
 
-    let batch = firebase.firestore().batch()
-    let std = firebase.firestore().collection("stdRoom")
-    let stdView = firebase
+    const batch = db.batch()
+    const std = db.collection("stdRoom")
+    const stdView = firebase
       .firestore()
       .collection("stdRoom")
       .where("date", ">=", moment(state.arrivalDate).startOf("d")._d)
@@ -226,40 +236,87 @@ const Booking = () => {
     stdView
       .get()
       .then(resp => {
+        let err = false
+
         resp.forEach(doc => {
           if (doc.data().avail >= state.room) {
             batch.update(std.doc(doc.id), {
               avail: doc.data().avail - state.room,
             })
           } else {
+            err = true
+            setUserState(prevState => {
+              return {
+                ...prevState,
+                error: true,
+                errorMessage:
+                  "Sorry there was an error. Availability may have changed.",
+                loading: false,
+              }
+            })
             console.log("not enough availability")
           }
         })
-        batch
-          .commit()
-          .then(() => console.log("batch commit"))
-          .catch(() => console.log("cannot write"))
 
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(userState.userId)
-          .collection("bookingList")
-          .add({
-            arrival: state.arrivalDate,
-            departure: state.departureDate,
-            ratePerNightPerRoom: state.rate,
-            totalNight: state.totalNight,
-            totalPrice: state.totalPrice,
-            cardName: cardState.name,
-            cardNumber: cardState.number,
-            cardExpiry: cardState.expiry,
+        if (!err) {
+          batch
+            .commit()
+            .then(() => console.log("batch commit"))
+            .catch(() => console.log("cannot write"))
+
+          db.collection("users")
+            .doc(userState.userId)
+            .collection("bookingList")
+            .add({
+              arrival: state.arrivalDate,
+              departure: state.departureDate,
+              ratePerNightPerRoom: state.rate,
+              totalNight: state.totalNight,
+              totalPrice: state.totalPrice,
+              cardName: cardState.name,
+              cardNumber: cardState.number,
+              cardExpiry: cardState.expiry,
+              errorMessage: userState.errorMessage,
+            })
+          setUserState(prevState => {
+            return {
+              ...prevState,
+              loading: false,
+              error: false,
+              errorMessage: "",
+
+              showBookingProceed: false,
+            }
           })
-          .then(resp => console.log("success", resp.id))
-          .catch(err => console.log(err))
+            .then(resp => console.log("success", resp.id))
+            .catch(err => console.log(err))
+        }
       })
+
       .catch(err => console.log(err))
   }
+
+  const handleDismiss = () => {
+    setUserState(prevState => {
+      return {
+        ...prevState,
+        error: false,
+        errorMessage: "",
+        loading: false,
+      }
+    })
+  }
+
+  // const result = []
+  // db.collection(`/users/${userState.userId}/bookingList`)
+  //   .get()
+  //   .then(resp => {
+  //     resp.forEach(doc => {
+  //       result.push(doc.data())
+  //     })
+  //   })
+  //   .catch(err => console.log(err))
+  // console.log("RESULT", result)
 
   return (
     <Layout>
@@ -273,9 +330,9 @@ const Booking = () => {
             change={handleChange}
             submit={handleSignIn}
             error={userState.error}
-            choice={handleShow}
-            error={userState.error}
+            dismiss={handleDismiss}
             errorMessage={userState.errorMessage}
+            choice={handleShow}
           />
         </div>
       )}
@@ -287,9 +344,10 @@ const Booking = () => {
             password={userState.password}
             change={handleChange}
             submit={handleSignUp}
-            error={userState.error}
-            errorMessage={userState.errorMessage}
             choice={handleShow}
+            error={userState.error}
+            dismiss={handleDismiss}
+            errorMessage={userState.errorMessage}
             userName={userState.userName}
           />
         </div>
@@ -302,13 +360,16 @@ const Booking = () => {
           </ParaContainer>
         </div>
       )}
-      {userState.showBookingProceed ? (
+      {userState.showBookingProceed && state.totalNight >= 1 ? (
         <BookingProceed
           state={state}
           userState={userState}
           cardState={cardState}
           handleCardChange={handleCardChange}
           handleCardSubmit={handleCardSubmit}
+          error={userState.error}
+          dismiss={handleDismiss}
+          errorMessage={userState.errorMessage}
         />
       ) : null}
     </Layout>
