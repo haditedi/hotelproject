@@ -51,16 +51,6 @@ const Layout = props => {
     })
   }
 
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `)
-
   return (
     <div className={classes.container}>
       <div className={classes.content}>
