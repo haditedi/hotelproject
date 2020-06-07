@@ -1,4 +1,4 @@
-import React, { useReducer } from "react"
+import React from "react"
 import moment from "moment"
 
 const initialState = {
@@ -16,34 +16,8 @@ const initialState = {
 export const GlobalStateContext = React.createContext(initialState)
 export const GlobalSetSearchContext = React.createContext()
 
-// const reducer = (state, action) => {
-//   switch (action.type) {
-//     case "SEARCH": {
-//       return {
-//         ...state,
-//         departureDate: action.departureDate,
-//       }
-//     }
-
-//     default:
-//       return state
-//   }
-// }
-
 const GlobalContextProvider = ({ children }) => {
   const [state, setSearch] = React.useState(initialState)
-
-  //   {
-  //   room: 1,
-  //   arrivalDate: moment.utc().startOf("d").format(),
-  //   departureDate: moment.utc().startOf("d").add(1, "days").format(),
-  //   searchResult: false,
-  //   available: false,
-  //   loading: false,
-  //   rate: 0,
-  //   totalNight: 0,
-  //   totalPrice: 0,
-  // }
 
   return (
     <GlobalStateContext.Provider value={state}>

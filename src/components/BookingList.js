@@ -1,7 +1,7 @@
 import React from "react"
-// import classes from "./BookingProceed.module.css"
 import ParaContainer from "./ParaContainer"
 import Button from "@material-ui/core/Button"
+import Success from "./Success"
 
 const BookingConfirmation = props => {
   return (
@@ -20,10 +20,16 @@ const BookingConfirmation = props => {
             currency: "GBP",
           })}
         </p>
-        <Button onClick={props.cancel} variant="contained" color="secondary">
+        <Button
+          size="small"
+          onClick={props.cancel}
+          variant="contained"
+          color="secondary"
+        >
           Cancel This Booking
         </Button>
       </ParaContainer>
+      <Success open={props.open} handleClose={props.handleClose} />
     </div>
   )
 }

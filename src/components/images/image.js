@@ -55,6 +55,7 @@ const Image = props => {
   `)
   const sourceOutdoor = [
     data.outdoorMobile.child.fixed,
+
     {
       ...data.outdoorDesktop.child.fixed,
       media: `(min-width: 800px)`,

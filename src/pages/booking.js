@@ -7,13 +7,18 @@ import Spinner from "../components/Spinner"
 import useFirebase from "../components/Firebase"
 import BookingProceed from "../components/BookingProceed"
 import moment from "moment"
-import { GlobalStateContext } from "../context/GlobalContextProvider"
+import {
+  GlobalStateContext,
+  GlobalSetSearchContext,
+} from "../context/GlobalContextProvider"
 import BookingList from "../components/BookingList"
+import { navigate } from "gatsby"
 
 //todo ==> Need to add unsubscribe listener
 
 const Booking = () => {
   const state = useContext(GlobalStateContext)
+  const setSearch = useContext(GlobalSetSearchContext)
 
   const firebase = useFirebase()
 
@@ -32,6 +37,7 @@ const Booking = () => {
 
   const [showSignIn, setShowSignIn] = useState(false)
   const [showSignUp, setShowSignUp] = useState(false)
+  const [open, setOpen] = useState(false)
   const [cardState, setCardState] = useState({
     expiry: "",
     name: "",
@@ -92,8 +98,9 @@ const Booking = () => {
   }, [firebase])
 
   useEffect(() => {
+    let unsubscribe
     if (userState.userId) {
-      firebase
+      unsubscribe = firebase
         .firestore()
         .collection("users")
         .doc(userState.userId)
@@ -107,16 +114,7 @@ const Booking = () => {
           })
           setBookingList(result)
         })
-
-      // .get()
-      // .then(resp => {
-      //   resp.forEach(doc => {
-      //     let result = doc.data()
-      //     result.confirmation = doc.id
-      //     setBookingList(prevValue => [...prevValue, result])
-      //   })
-      // })
-      // .catch(err => console.log(err))
+      return () => unsubscribe()
     }
   }, [userState.user, userState.showBookingProceed])
 
@@ -251,6 +249,24 @@ const Booking = () => {
     })
   }
 
+  const handleSearchAgain = () => {
+    setSearch(prevState => {
+      return {
+        ...prevState,
+        room: 1,
+        arrivalDate: moment.utc().startOf("d").format(),
+        departureDate: moment.utc().startOf("d").add(1, "days").format(),
+        searchResult: false,
+        available: false,
+        loading: false,
+        rate: 0,
+        totalNight: 0,
+        totalPrice: 0,
+      }
+    })
+    navigate("/")
+  }
+
   const handleCardSubmit = e => {
     e.preventDefault()
     setUserState(prevState => {
@@ -327,6 +343,7 @@ const Booking = () => {
             }
           })
           setBookingList([])
+          setOpen(true)
         }
       })
 
@@ -354,6 +371,13 @@ const Booking = () => {
       .delete()
       .then(() => console.log("deleted"))
       .catch(() => console.log("error deleting"))
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+  const handleOpen = e => {
+    setOpen(true)
   }
 
   return (
@@ -408,6 +432,9 @@ const Booking = () => {
           error={userState.error}
           dismiss={handleDismiss}
           errorMessage={userState.errorMessage}
+          searchAgain={handleSearchAgain}
+          open={open}
+          handleClose={handleClose}
         />
       ) : null}
 
@@ -423,6 +450,9 @@ const Booking = () => {
                 ratePerNight={item.ratePerNightPerRoom}
                 totalPrice={item.totalPrice}
                 cancel={() => handleCancelBooking(item.confirmation)}
+                open={open}
+                handleClose={handleClose}
+                handleOpen={handleOpen}
               />
             )
           })

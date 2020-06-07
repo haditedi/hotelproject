@@ -76,7 +76,12 @@ const SignIn = props => {
         </form>
         <p style={{ textAlign: "center", margin: "15px" }}>
           Don't have an account? Sign up is easy. Please click{" "}
-          <Button onClick={props.choice} color="primary" size="small">
+          <Button
+            onClick={props.choice}
+            variant="outlined"
+            color="primary"
+            size="small"
+          >
             here
           </Button>
         </p>

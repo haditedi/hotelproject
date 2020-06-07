@@ -68,7 +68,7 @@ const Layout = props => {
 
         <main>{props.children}</main>
       </div>
-      <footer style={{ textAlign: "center" }}>
+      <footer style={{ textAlign: "center", color: "white" }}>
         <p>© {new Date().getFullYear()} Hotel Paradise</p>
       </footer>
     </div>

@@ -38,6 +38,7 @@ const SearchResult = props => {
               style={{ marginBottom: "20px" }}
               id="bookButton"
               variant="contained"
+              color="primary"
               type="submit"
               onClick={props.navigate}
             >

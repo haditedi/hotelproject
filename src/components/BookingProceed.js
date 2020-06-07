@@ -15,6 +15,7 @@ const BookingProceed = ({
   error,
   dismiss,
   errorMessage,
+  searchAgain,
 }) => {
   return (
     <div className={classes.outer}>
@@ -89,10 +90,14 @@ const BookingProceed = ({
               style={{ margin: "20px 15px" }}
               id="bookButton"
               variant="contained"
+              color="primary"
               type="submit"
               onClick={handleCardSubmit}
             >
               Looks good. Please book this.
+            </Button>
+            <Button variant="contained" onClick={searchAgain}>
+              Search Another Date
             </Button>
           </form>
         </section>
