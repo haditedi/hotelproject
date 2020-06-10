@@ -4,7 +4,7 @@ import StdRoom from "./StdRoom"
 import classes from "./BookingProceed.module.css"
 import TextField from "@material-ui/core/TextField"
 import Button from "@material-ui/core/Button"
-import Error from "./Error"
+import Alert from "@material-ui/lab/Alert"
 
 const BookingProceed = ({
   state,
@@ -85,7 +85,20 @@ const BookingProceed = ({
               Cancellation policy is 1 day before arrival day at no charge
               otherwise 1 day charge apply.
             </p>
-            {error && <Error dismiss={dismiss} errorMessage={errorMessage} />}
+
+            {error && (
+              <section
+                style={{
+                  textAlign: "center",
+                  margin: "10px auto",
+                  width: "500px",
+                }}
+              >
+                <Alert severity="error" onClose={dismiss}>
+                  {errorMessage}
+                </Alert>
+              </section>
+            )}
             <Button
               style={{ margin: "20px 15px" }}
               id="bookButton"

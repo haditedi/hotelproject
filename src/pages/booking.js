@@ -13,8 +13,7 @@ import {
 } from "../context/GlobalContextProvider"
 import BookingList from "../components/BookingList"
 import { navigate } from "gatsby"
-
-//todo ==> Need to add unsubscribe listener
+import Alert from "@material-ui/lab/Alert"
 
 const Booking = () => {
   const state = useContext(GlobalStateContext)
@@ -35,42 +34,70 @@ const Booking = () => {
   })
   console.log("[USERSTATE]", userState)
 
-  const [showSignIn, setShowSignIn] = useState(false)
-  const [showSignUp, setShowSignUp] = useState(false)
-  const [open, setOpen] = useState(false)
   const [cardState, setCardState] = useState({
     expiry: "",
     name: "",
     number: "",
   })
+
+  const [showSignIn, setShowSignIn] = useState(false)
+  const [showSignUp, setShowSignUp] = useState(false)
+  const [open, setOpen] = useState(false)
   const [bookingList, setBookingList] = useState([])
+  const [info, setInfo] = useState("")
 
   console.log("[SEARCHSTATE]", state)
 
   useEffect(() => {
+    setUserState(prevValue => {
+      return {
+        ...prevValue,
+        loading: true,
+      }
+    })
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
-        console.log(user)
-        firebase
-          .firestore()
-          .collection("users")
-          .where("email", "==", user.email)
-          .get()
-          .then(resp =>
-            resp.forEach(doc => {
+        if (state.totalNight > 0) {
+          setUserState(prevValue => {
+            return {
+              ...prevValue,
+              showBookingProceed: false,
+            }
+          })
+        }
+
+        setTimeout(() => {
+          firebase
+            .firestore()
+            .collection("users")
+            .where("userId", "==", user.uid)
+            .get()
+            .then(resp => {
+              resp.forEach(doc => {
+                console.log(doc.data())
+                setUserState(prevValue => {
+                  return {
+                    ...prevValue,
+                    user: user,
+                    userName: doc.data().name,
+                    email: doc.data().email,
+                    userId: user.uid,
+                    showBookingProceed: true,
+                    loading: false,
+                  }
+                })
+              })
+            })
+            .catch(err => {
+              console.log("ERRROR", err)
               setUserState(prevValue => {
                 return {
                   ...prevValue,
-                  user: user,
-                  userName: doc.data().name,
-                  email: doc.data().email,
-                  userId: user.uid,
-                  showBookingProceed: true,
+                  loading: false,
                 }
               })
             })
-          )
-          .catch(err => console.log(err))
+        }, 2000)
 
         console.log("[FIREBASE] ", user)
 
@@ -264,7 +291,7 @@ const Booking = () => {
         totalPrice: 0,
       }
     })
-    navigate("/")
+    navigate("/#search")
   }
 
   const handleCardSubmit = e => {
@@ -344,6 +371,20 @@ const Booking = () => {
           })
           setBookingList([])
           setOpen(true)
+          setSearch(prevState => {
+            return {
+              ...prevState,
+              room: 1,
+              arrivalDate: moment.utc().startOf("d").format(),
+              departureDate: moment.utc().startOf("d").add(1, "days").format(),
+              searchResult: false,
+              available: false,
+              loading: false,
+              rate: 0,
+              totalNight: 0,
+              totalPrice: 0,
+            }
+          })
         }
       })
 
@@ -369,7 +410,10 @@ const Booking = () => {
       .collection("bookingList")
       .doc(e)
       .delete()
-      .then(() => console.log("deleted"))
+      .then(() => {
+        setInfo("Reservation is cancelled")
+        setTimeout(() => setInfo(""), 3000)
+      })
       .catch(() => console.log("error deleting"))
   }
 
@@ -418,10 +462,25 @@ const Booking = () => {
       {userState.user && (
         <div style={{ textAlign: "center" }}>
           <ParaContainer>
-            <h3>Welcome {userState.userName}</h3>
+            <h3 style={{ marginTop: "1.45rem" }}>
+              Welcome {userState.userName}
+            </h3>
           </ParaContainer>
         </div>
       )}
+
+      {info && (
+        <section
+          style={{
+            textAlign: "center",
+            margin: "10px auto",
+            width: "500px",
+          }}
+        >
+          <Alert severity="success">{info}</Alert>
+        </section>
+      )}
+
       {userState.showBookingProceed && state.totalNight >= 1 ? (
         <BookingProceed
           state={state}

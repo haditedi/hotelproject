@@ -3,6 +3,7 @@ import animation from "../pages/animation.module.css"
 import StdRoom from "./StdRoom"
 import ParaContainer from "./ParaContainer"
 import Button from "@material-ui/core/Button"
+import Alert from "@material-ui/lab/Alert"
 
 const SearchResult = props => {
   return (
@@ -15,7 +16,7 @@ const SearchResult = props => {
           <StdRoom />
 
           <ParaContainer>
-            <h3>Availability</h3>
+            <h3 style={{ marginTop: "1.45rem" }}>Availability</h3>
             <hr style={{ width: "50%" }} />
             <p>Arrival Date : {props.arrivalDate}</p>
             <p>Departure Date : {props.departureDate}</p>
@@ -47,9 +48,13 @@ const SearchResult = props => {
           </ParaContainer>
         </section>
       ) : (
-        <h3 style={{ textAlign: "center", marginTop: "25px", color: "red" }}>
-          Sorry, no Availability
-        </h3>
+        <section
+          style={{ textAlign: "center", margin: "auto", width: "500px" }}
+        >
+          <Alert severity="error">
+            Sorry, there was no availability for the date you are searching for.
+          </Alert>
+        </section>
       )}
     </div>
   )

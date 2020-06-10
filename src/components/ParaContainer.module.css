@@ -1,23 +1,20 @@
 .para {
-  width: 80%;
+  width: 80vw;
+  max-width: 700px;
   margin: 10px;
   padding: 15px 25px;
   text-align: center;
   margin: 20px auto;
   box-shadow: 0 3px 3px 3px #035aa6;
-  background-color: #fcbf1e;
+  background-color: #6cdb03;
+  /* #fcbf1e; */
 }
 .para p {
   line-height: 1.8em;
 }
-.para h3 {
-  margin-top: 1.45rem;
-}
 
 @media (min-width: 500px) {
   .para {
-    width: 50%;
     margin-top: 30px;
-    max-width: 700px;
   }
 }

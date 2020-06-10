@@ -6,7 +6,7 @@ import Success from "./Success"
 const BookingConfirmation = props => {
   return (
     <div>
-      <ParaContainer style={{ textAlign: "left" }}>
+      <ParaContainer style={{ textAlign: "left", padding: "25px" }}>
         <h3 style={{ textDecoration: "underline" }}>Existing Booking</h3>
         <p>Confirmation number : {props.confirmation}.</p>
         <p>Arrival Date :{props.arrivalDate}</p>

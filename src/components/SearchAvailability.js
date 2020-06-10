@@ -23,7 +23,7 @@ const SearchAvailability = props => {
   const classes = useStyles()
 
   return (
-    <section style={{ textAlign: "center" }}>
+    <section id="search" style={{ textAlign: "center" }}>
       <form style={{ margin: "35px 20%" }} onSubmit={props.submit}>
         <h4 style={{ margin: "10px auto", paddingLeft: "10px" }}>
           Search Availability

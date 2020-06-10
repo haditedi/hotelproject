@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
 import KeyIcon from "@material-ui/icons/VpnKey"
 import animation from "../../pages/animation.module.css"
-import Error from "../Error"
+import Alert from "@material-ui/lab/Alert"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -73,7 +73,17 @@ const SignUp = props => {
             onChange={props.change}
           />
           {props.error && (
-            <Error dismiss={props.dismiss} errorMessage={props.errorMessage} />
+            <section
+              style={{
+                textAlign: "center",
+                margin: "10px auto",
+                width: "500px",
+              }}
+            >
+              <Alert severity="error" onClose={props.dismiss}>
+                {props.errorMessage}
+              </Alert>
+            </section>
           )}
           <Button
             style={{ width: "150px", marginBottom: "25px" }}
