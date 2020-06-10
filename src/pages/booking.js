@@ -32,7 +32,6 @@ const Booking = () => {
     loading: false,
     showBookingProceed: false,
   })
-  console.log("[USERSTATE]", userState)
 
   const [cardState, setCardState] = useState({
     expiry: "",
@@ -45,8 +44,6 @@ const Booking = () => {
   const [open, setOpen] = useState(false)
   const [bookingList, setBookingList] = useState([])
   const [info, setInfo] = useState("")
-
-  console.log("[SEARCHSTATE]", state)
 
   useEffect(() => {
     setUserState(prevValue => {
@@ -67,7 +64,6 @@ const Booking = () => {
         }
 
         setTimeout(() => {
-          console.log(user.uid)
           firebase
             .firestore()
             .collection("users")
@@ -97,12 +93,9 @@ const Booking = () => {
             })
         }, 1000)
 
-        console.log("[FIREBASE] ", user)
-
         setShowSignUp(false)
         setShowSignIn(false)
       } else {
-        console.log("not signed in")
         setShowSignIn(true)
         setBookingList([])
         setUserState(prevValue => {
@@ -144,7 +137,6 @@ const Booking = () => {
     }
   }, [userState.user, userState.showBookingProceed])
 
-  console.log("BOOKINGLIST", bookingList)
   const handleChange = event => {
     let name = event.target.name
     let value = event.target.value
@@ -230,7 +222,6 @@ const Booking = () => {
       .auth()
       .signInWithEmailAndPassword(userState.email, userState.password)
       .then(user => {
-        console.log("[SIGN IN]", user)
         setUserState(prevState => {
           return {
             ...prevState,

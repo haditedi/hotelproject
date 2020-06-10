@@ -26,7 +26,6 @@ const IndexPage = () => {
 
   useEffect(() => {
     if (state.arrivalDate >= state.departureDate) {
-      console.log("EFFECT")
       setSearchState(prevState => {
         return {
           ...prevState,
