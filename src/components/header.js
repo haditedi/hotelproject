@@ -1,5 +1,5 @@
 import { Link } from "gatsby"
-import React, { useContext } from "react"
+import React from "react"
 import MenuIcon from "@material-ui/icons/Menu"
 import Box from "@material-ui/core/Box"
 import Menu from "@material-ui/core/Menu"

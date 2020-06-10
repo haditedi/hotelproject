@@ -67,25 +67,23 @@ const Booking = () => {
         }
 
         setTimeout(() => {
+          console.log(user.uid)
           firebase
             .firestore()
             .collection("users")
-            .where("userId", "==", user.uid)
+            .doc(user.uid)
             .get()
-            .then(resp => {
-              resp.forEach(doc => {
-                console.log(doc.data())
-                setUserState(prevValue => {
-                  return {
-                    ...prevValue,
-                    user: user,
-                    userName: doc.data().name,
-                    email: doc.data().email,
-                    userId: user.uid,
-                    showBookingProceed: true,
-                    loading: false,
-                  }
-                })
+            .then(doc => {
+              setUserState(prevValue => {
+                return {
+                  ...prevValue,
+                  user: user,
+                  userName: doc.data().name,
+                  email: doc.data().email,
+                  userId: user.uid,
+                  showBookingProceed: true,
+                  loading: false,
+                }
               })
             })
             .catch(err => {
@@ -97,7 +95,7 @@ const Booking = () => {
                 }
               })
             })
-        }, 2000)
+        }, 1000)
 
         console.log("[FIREBASE] ", user)
 
@@ -195,7 +193,6 @@ const Booking = () => {
               error: false,
               errorMessage: "",
               password: "",
-              loading: false,
             }
           })
 
@@ -240,7 +237,6 @@ const Booking = () => {
             password: "",
             error: false,
             errorMessage: "",
-            loading: false,
           }
         })
       })
