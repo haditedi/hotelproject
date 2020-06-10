@@ -118,6 +118,7 @@ const Booking = () => {
             userName: "",
             userId: "",
             showBookingProceed: false,
+            loading: false,
           }
         })
       }
