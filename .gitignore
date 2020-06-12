@@ -1,3 +1,7 @@
+functions/
+.firebaserc
+firebase.json
+
 # Logs
 logs
 *.log

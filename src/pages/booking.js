@@ -54,6 +54,7 @@ const Booking = () => {
     })
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
+        console.log("USER", user)
         if (state.totalNight > 0) {
           setUserState(prevValue => {
             return {
@@ -211,6 +212,7 @@ const Booking = () => {
 
   const handleSignIn = event => {
     event.preventDefault()
+
     setBookingList([])
     setUserState(prevState => {
       return {
@@ -290,6 +292,19 @@ const Booking = () => {
         loading: true,
       }
     })
+    let addMessage = firebase.functions().httpsCallable("addMessage")
+    addMessage({ message: userState.email })
+      .then(result => {
+        console.log(result.data.message)
+      })
+      .catch(function (error) {
+        // Getting the Error details.
+        var code = error.code
+        var message = error.message
+        var details = error.details
+        console.log(code, message, details)
+        // ...
+      })
 
     const batch = firebase.firestore().batch()
     const std = firebase.firestore().collection("stdRoom")

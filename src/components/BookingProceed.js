@@ -109,7 +109,11 @@ const BookingProceed = ({
             >
               Looks good. Please book this.
             </Button>
-            <Button variant="contained" onClick={searchAgain}>
+            <Button
+              style={{ margin: "20px 15px" }}
+              variant="contained"
+              onClick={searchAgain}
+            >
               Search Another Date
             </Button>
           </form>
