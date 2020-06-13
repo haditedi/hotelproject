@@ -111,7 +111,7 @@ const BookingProceed = ({
             </Button>
             <Button
               style={{ margin: "20px 15px" }}
-              variant="contained"
+              variant="outlined"
               onClick={searchAgain}
             >
               Search Another Date

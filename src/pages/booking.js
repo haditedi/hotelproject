@@ -52,7 +52,7 @@ const Booking = () => {
         loading: true,
       }
     })
-    firebase.auth().onAuthStateChanged(function (user) {
+    const unsubscribe = firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         console.log("USER", user)
         if (state.totalNight > 0) {
@@ -115,6 +115,7 @@ const Booking = () => {
         })
       }
     })
+    return () => unsubscribe()
   }, [firebase])
 
   useEffect(() => {

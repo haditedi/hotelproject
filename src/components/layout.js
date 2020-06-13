@@ -14,7 +14,7 @@ const Layout = props => {
 
   useEffect(() => {
     if (!firebase) return
-    firebase.auth().onAuthStateChanged(function (user) {
+    const unsubscribe = firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         setUser(prevValue => {
           return {
@@ -31,6 +31,7 @@ const Layout = props => {
         })
       }
     })
+    return () => unsubscribe()
   }, [firebase])
 
   const handleLogOut = () => {
