@@ -11,14 +11,14 @@ const Image = () => {
       outdoorMobile: file(relativePath: { eq: "hotel-paradise.jpg" }) {
         child: childImageSharp {
           fluid(maxWidth: 1000, quality: 100) {
-            ...GatsbyImageSharpFluid
+            ...GatsbyImageSharpFluid_withWebp
           }
         }
       }
       outdoorDesktop: file(relativePath: { eq: "hotel-paradise.jpg" }) {
         child: childImageSharp {
           fluid(maxWidth: 1700, maxHeight: 800, quality: 100) {
-            ...GatsbyImageSharpFluid
+            ...GatsbyImageSharpFluid_withWebp
           }
         }
       }
@@ -26,14 +26,14 @@ const Image = () => {
       poolMobile: file(relativePath: { eq: "hotel-pool.jpg" }) {
         child: childImageSharp {
           fluid(maxWidth: 1000, quality: 100) {
-            ...GatsbyImageSharpFluid
+            ...GatsbyImageSharpFluid_withWebp
           }
         }
       }
       poolDesktop: file(relativePath: { eq: "hotel-pool.jpg" }) {
         child: childImageSharp {
           fluid(maxWidth: 1700, maxHeight: 800, quality: 100) {
-            ...GatsbyImageSharpFluid
+            ...GatsbyImageSharpFluid_withWebp
           }
         }
       }
@@ -41,14 +41,14 @@ const Image = () => {
       nightMobile: file(relativePath: { eq: "hotel-night.jpg" }) {
         child: childImageSharp {
           fluid(maxWidth: 1000, quality: 100) {
-            ...GatsbyImageSharpFluid
+            ...GatsbyImageSharpFluid_withWebp
           }
         }
       }
       nightDesktop: file(relativePath: { eq: "hotel-night.jpg" }) {
         child: childImageSharp {
           fluid(maxWidth: 1700, maxHeight: 800, quality: 100) {
-            ...GatsbyImageSharpFluid
+            ...GatsbyImageSharpFluid_withWebp
           }
         }
       }
