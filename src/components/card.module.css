@@ -1,8 +1,8 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin: 25px;
-  /* background-color: white; */
+  margin: 10px auto;
+  width: 80vw;
   box-shadow: 0 3px 3px 3px #035aa6;
 }
 .imgCont {

@@ -121,18 +121,30 @@ const Image = () => {
     <>
       {state.picOne && (
         <div className={classes.slideInBlurredLeft}>
-          <Img className={classes.img} fluid={sourceOutdoor} />
+          <Img
+            style={{ margin: "20px auto" }}
+            className={classes.img}
+            fluid={sourceOutdoor}
+          />
         </div>
       )}
       {state.picTwo && (
         <div className={classes.slideInBlurredLeft}>
-          <Img className={classes.img} fluid={sourcePool} />
+          <Img
+            style={{ margin: "20px auto" }}
+            className={classes.img}
+            fluid={sourcePool}
+          />
         </div>
       )}
 
       {state.picThree && (
         <div className={classes.slideInBlurredLeft}>
-          <Img className={classes.img} fluid={sourceNight} />
+          <Img
+            style={{ margin: "20px auto" }}
+            className={classes.img}
+            fluid={sourceNight}
+          />
         </div>
       )}
     </>

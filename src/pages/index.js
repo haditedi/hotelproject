@@ -13,6 +13,7 @@ import {
   GlobalStateContext,
   GlobalSetSearchContext,
 } from "../context/GlobalContextProvider"
+import Divider from "../images/divider.svg"
 
 const IndexPage = () => {
   const state = useContext(GlobalStateContext)
@@ -137,6 +138,12 @@ const IndexPage = () => {
         <HeadingText>Hotel Paradise</HeadingText>
 
         <Image />
+
+        <img
+          style={{ height: "30px", width: "100%" }}
+          src={Divider}
+          alt="section divider"
+        />
 
         {state.loading && <Spinner />}
 

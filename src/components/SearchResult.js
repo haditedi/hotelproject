@@ -11,7 +11,7 @@ const SearchResult = props => {
       {props.available ? (
         <section
           className={animation.scaleInCenter}
-          style={{ textAlign: "center", margin: "25px auto", padding: "10px" }}
+          style={{ textAlign: "center", margin: "5px auto" }}
         >
           <StdRoom />
 
