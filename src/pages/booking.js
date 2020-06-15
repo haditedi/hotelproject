@@ -14,6 +14,7 @@ import {
 import BookingList from "../components/BookingList"
 import { navigate } from "gatsby"
 import Alert from "@material-ui/lab/Alert"
+import Button from "@material-ui/core/Button"
 
 const Booking = () => {
   const state = useContext(GlobalStateContext)
@@ -64,35 +65,33 @@ const Booking = () => {
           })
         }
 
-        setTimeout(() => {
-          firebase
-            .firestore()
-            .collection("users")
-            .doc(user.uid)
-            .get()
-            .then(doc => {
-              setUserState(prevValue => {
-                return {
-                  ...prevValue,
-                  user: user,
-                  userName: doc.data().name,
-                  email: doc.data().email,
-                  userId: user.uid,
-                  showBookingProceed: true,
-                  loading: false,
-                }
-              })
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(user.uid)
+          .get()
+          .then(doc => {
+            setUserState(prevValue => {
+              return {
+                ...prevValue,
+                user: user,
+                userName: doc.data().name,
+                email: doc.data().email,
+                userId: user.uid,
+                showBookingProceed: true,
+                loading: false,
+              }
             })
-            .catch(err => {
-              console.log("ERRROR", err)
-              setUserState(prevValue => {
-                return {
-                  ...prevValue,
-                  loading: false,
-                }
-              })
+          })
+          .catch(err => {
+            console.log("ERRROR", err)
+            setUserState(prevValue => {
+              return {
+                ...prevValue,
+                loading: false,
+              }
             })
-        }, 1000)
+          })
 
         setShowSignUp(false)
         setShowSignIn(false)
@@ -155,11 +154,9 @@ const Booking = () => {
     event.preventDefault()
     setBookingList([])
     setUserState(prevState => {
-      return {
-        ...prevState,
-        loading: true,
-      }
+      return { ...prevState, loading: true }
     })
+
     if (userState.password.length < 8) {
       setUserState(prevState => {
         return {
@@ -174,7 +171,7 @@ const Booking = () => {
         .auth()
         .createUserWithEmailAndPassword(userState.email, userState.password)
         .then(resp => {
-          console.log("[handleSingUp] ", resp)
+          console.log("[handleSignUp] ", resp)
           firebase.firestore().collection("users").doc(resp.user.uid).set({
             name: userState.userName,
             email: userState.email,
@@ -190,7 +187,7 @@ const Booking = () => {
             }
           })
 
-          console.log("success")
+          console.log("SIGN UP success")
         })
         .catch(function (error) {
           // Handle Errors here.
@@ -207,7 +204,7 @@ const Booking = () => {
 
           console.log(errorMessage)
         })
-      console.log(userState)
+      console.log("SIGNUP ", userState)
     }
   }
 
@@ -224,7 +221,7 @@ const Booking = () => {
     firebase
       .auth()
       .signInWithEmailAndPassword(userState.email, userState.password)
-      .then(user => {
+      .then(() => {
         setUserState(prevState => {
           return {
             ...prevState,
@@ -240,12 +237,10 @@ const Booking = () => {
           return {
             ...prevState,
             error: true,
-            errorMessage: "Sorry, something went wrong. Unable to sign in",
+            errorMessage: errorMessage,
             loading: false,
           }
         })
-        console.log(errorMessage)
-        // ...
       })
   }
 
@@ -418,7 +413,10 @@ const Booking = () => {
         setInfo("Reservation is cancelled")
         setTimeout(() => setInfo(""), 3000)
       })
-      .catch(() => console.log("error deleting"))
+      .catch(() => {
+        setInfo("Sorry, an error has occured")
+        setTimeout(() => setInfo(""), 3000)
+      })
   }
 
   const handleClose = () => {
@@ -426,6 +424,42 @@ const Booking = () => {
   }
   const handleOpen = e => {
     setOpen(true)
+  }
+
+  const deleteAccount = () => {
+    if (bookingList.length === 0) {
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(userState.userId)
+        .delete()
+        .then(() => {
+          console.log("FIRESTRORE DELETE SUCCESS")
+          setInfo("Your Account is Deleted")
+          setTimeout(() => setInfo(""), 3000)
+        })
+        .catch(error => {
+          console.log("FIRESTORE DELETE ERRROR", error.message)
+          setInfo("Sorry, an error has occured")
+          setTimeout(() => setInfo(""), 3000)
+        })
+      let user = firebase.auth().currentUser
+      user
+        .delete()
+        .then(function () {
+          setInfo("Account Deleted")
+          setTimeout(() => setInfo(""), 3000)
+        })
+        .catch(function (error) {
+          setInfo(error.message)
+          setTimeout(() => setInfo(""), 3000)
+        })
+    } else {
+      setInfo(
+        "There is an existing booking. Please cancel booking first before deleting account."
+      )
+      setTimeout(() => setInfo(""), 3000)
+    }
   }
 
   return (
@@ -469,6 +503,15 @@ const Booking = () => {
             <h3 style={{ marginTop: "1.45rem" }}>
               Welcome {userState.userName}
             </h3>
+
+            <Button
+              onClick={deleteAccount}
+              variant="outlined"
+              style={{ marginRight: "70%" }}
+            >
+              {" "}
+              Delete Account
+            </Button>
           </ParaContainer>
         </div>
       )}

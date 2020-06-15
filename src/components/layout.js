@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react"
 import classes from "./layout.module.css"
-import { useStaticQuery, graphql } from "gatsby"
 import Header from "./header"
 import "./layout.css"
 import useFirebase from "./useFirebase"
