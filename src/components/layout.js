@@ -60,7 +60,16 @@ const Layout = props => {
         <main>{props.children}</main>
       </div>
       <footer style={{ textAlign: "center", color: "white" }}>
-        <p>© {new Date().getFullYear()} Hotel Paradise</p>
+        <p>
+          © {new Date().getFullYear()} Hotel Paradise. Created by{" "}
+          <a
+            href="https://www.it-tedi.tech"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            IT - TEDI
+          </a>
+        </p>
       </footer>
     </div>
   )

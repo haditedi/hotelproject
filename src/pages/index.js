@@ -5,7 +5,6 @@ import SEO from "../components/seo"
 import SearchAvailability from "../components/SearchAvailability"
 import HeadingText from "../components/HeadingText"
 import moment from "moment"
-//import useFirebase from "../components/useFirebase"
 import firebase from "gatsby-plugin-firebase"
 import SearchResult from "../components/SearchResult"
 import Spinner from "../components/Spinner"
@@ -20,11 +19,8 @@ const IndexPage = () => {
   const state = useContext(GlobalStateContext)
   const setSearchState = useContext(GlobalSetSearchContext)
 
-  //const firebase = useFirebase()
-
   const arrive = state.arrivalDate
   const depart = state.departureDate
-  console.log(state)
 
   useEffect(() => {
     if (state.arrivalDate >= state.departureDate) {

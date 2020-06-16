@@ -4,7 +4,6 @@ import SignUp from "../components/Users/SignUp"
 import SignIn from "../components/Users/SignIn"
 import ParaContainer from "../components/ParaContainer"
 import Spinner from "../components/Spinner"
-//import useFirebase from "../components/Firebase"
 import BookingProceed from "../components/BookingProceed"
 import moment from "moment"
 import {
@@ -20,8 +19,6 @@ import firebase from "gatsby-plugin-firebase"
 const Booking = () => {
   const state = useContext(GlobalStateContext)
   const setSearch = useContext(GlobalSetSearchContext)
-
-  //const firebase = useFirebase()
 
   const [userState, setUserState] = useState({
     email: "",
@@ -48,7 +45,6 @@ const Booking = () => {
   const [info, setInfo] = useState("")
 
   useEffect(() => {
-    console.log("AUTH", firebase.auth().currentUser)
     setUserState(prevValue => {
       return {
         ...prevValue,
@@ -176,8 +172,6 @@ const Booking = () => {
         .auth()
         .createUserWithEmailAndPassword(userState.email, userState.password)
         .then(resp => {
-          console.log("[handleSignUp] ", resp)
-
           // let actionCodeSettings = {
           //   url:
           //     "http://localhost:8000/booking?email=" +
@@ -209,13 +203,13 @@ const Booking = () => {
           setUserState(prevState => {
             return {
               ...prevState,
+              user: resp.user,
+              userId: resp.user.uid,
               error: false,
               errorMessage: "",
               password: "",
             }
           })
-
-          console.log("SIGN UP success")
         })
         .catch(function (error) {
           // Handle Errors here.
