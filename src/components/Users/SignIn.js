@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button"
 import KeyIcon from "@material-ui/icons/VpnKey"
 import animation from "../../pages/animation.module.css"
 import Alert from "@material-ui/lab/Alert"
+import signInGoogle from "../../images/signInGoogle.png"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -13,6 +14,9 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(1),
       width: "25ch",
     },
+  },
+  google: {
+    cursor: "pointer",
   },
 }))
 
@@ -84,6 +88,16 @@ const SignIn = props => {
           >
             Sign In
           </Button>
+          <section>
+            <h4>or</h4>
+            <img
+              className={classes.google}
+              src={signInGoogle}
+              style={{ width: "222px", height: "56px" }}
+              alt="google sign in"
+              onClick={props.googleSignIn}
+            />
+          </section>
         </form>
         <p style={{ textAlign: "center", margin: "15px" }}>
           Don't have an account? Sign up is easy. Please click{" "}
