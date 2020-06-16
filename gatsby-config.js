@@ -9,6 +9,20 @@ module.exports = {
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-emotion`,
     {
+      resolve: "gatsby-plugin-firebase",
+      options: {
+        credentials: {
+          apiKey: "AIzaSyBXz5G4pCgwK6ZVb04q6FJ9Br6vatxlJUU",
+          authDomain: "firestore-b0c8c.firebaseapp.com",
+          databaseURL: "https://firestore-b0c8c.firebaseio.com",
+          projectId: "firestore-b0c8c",
+          storageBucket: "firestore-b0c8c.appspot.com",
+          messagingSenderId: "807714406546",
+          appId: "1:807714406546:web:113f0477e066118c8be64b",
+        },
+      },
+    },
+    {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `images`,

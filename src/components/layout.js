@@ -2,14 +2,15 @@ import React, { useState, useEffect, useContext } from "react"
 import classes from "./layout.module.css"
 import Header from "./header"
 import "./layout.css"
-import useFirebase from "./useFirebase"
+//import useFirebase from "./useFirebase"
+import firebase from "gatsby-plugin-firebase"
 import moment from "moment"
 import { GlobalSetSearchContext } from "../context/GlobalContextProvider"
 
 const Layout = props => {
   const setSearchState = useContext(GlobalSetSearchContext)
   const [userState, setUser] = useState({ user: " " })
-  const firebase = useFirebase()
+  //const firebase = useFirebase()
 
   useEffect(() => {
     if (!firebase) return

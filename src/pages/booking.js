@@ -4,7 +4,7 @@ import SignUp from "../components/Users/SignUp"
 import SignIn from "../components/Users/SignIn"
 import ParaContainer from "../components/ParaContainer"
 import Spinner from "../components/Spinner"
-import useFirebase from "../components/Firebase"
+//import useFirebase from "../components/Firebase"
 import BookingProceed from "../components/BookingProceed"
 import moment from "moment"
 import {
@@ -15,12 +15,13 @@ import BookingList from "../components/BookingList"
 import { navigate } from "gatsby"
 import Alert from "@material-ui/lab/Alert"
 import Button from "@material-ui/core/Button"
+import firebase from "gatsby-plugin-firebase"
 
 const Booking = () => {
   const state = useContext(GlobalStateContext)
   const setSearch = useContext(GlobalSetSearchContext)
 
-  const firebase = useFirebase()
+  //const firebase = useFirebase()
 
   const [userState, setUserState] = useState({
     email: "",
@@ -47,7 +48,7 @@ const Booking = () => {
   const [info, setInfo] = useState("")
 
   useEffect(() => {
-    console.log(firebase.auth().currentUser)
+    console.log("AUTH", firebase.auth().currentUser)
     setUserState(prevValue => {
       return {
         ...prevValue,
@@ -72,28 +73,31 @@ const Booking = () => {
           .doc(user.uid)
           .get()
           .then(doc => {
-            setUserState(prevValue => {
-              return {
-                ...prevValue,
-                user: user,
-                userName: doc.data().name,
-                email: doc.data().email,
-                userId: user.uid,
-                showBookingProceed: true,
-                loading: false,
-              }
-            })
+            if (doc.exists) {
+              setUserState(prevValue => {
+                return {
+                  ...prevValue,
+                  user: user,
+                  userName: doc.data().name,
+                  email: doc.data().email,
+                  userId: user.uid,
+                  showBookingProceed: true,
+                }
+              })
+            } else {
+              console.log("DOC NOT EXIST")
+            }
           })
           .catch(err => {
             console.log("ERRROR", err)
-            setUserState(prevValue => {
-              return {
-                ...prevValue,
-                loading: false,
-              }
-            })
           })
 
+        setUserState(prevValue => {
+          return {
+            ...prevValue,
+            loading: false,
+          }
+        })
         setShowSignUp(false)
         setShowSignIn(false)
       } else {
@@ -268,6 +272,80 @@ const Booking = () => {
       })
   }
 
+  const googleSignIn = () => {
+    setUserState(prevState => {
+      return {
+        ...prevState,
+        loading: true,
+      }
+    })
+    let provider = new firebase.auth.GoogleAuthProvider()
+
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(function (result) {
+        console.log("GOOGLE IN", result)
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(result.user.uid)
+          .get()
+          .then(doc => {
+            if (doc.exists) {
+              console.log("GOOGLE doc exist")
+            } else {
+              console.log("GOOGLE doc NOT exist")
+              setUserState(prevValue => {
+                return {
+                  ...prevValue,
+                  user: result.user,
+                  userName: result.user.displayName,
+                  email: result.user.email,
+                  userId: result.user.uid,
+                  showBookingProceed: true,
+                }
+              })
+              firebase
+                .firestore()
+                .collection("users")
+                .doc(result.user.uid)
+                .set({
+                  email: result.user.email,
+                  name: result.user.displayName,
+                  userId: result.user.uid,
+                })
+                .then(() => console.log("WRITE SUCCESS"))
+                .catch(error => console.log("ERROR", error))
+            }
+          })
+
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken
+        // The signed-in user info.
+        var user = result.user
+
+        // ...
+      })
+      .catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code
+        var errorMessage = error.message
+        console.log(errorMessage)
+        // The email of the user's account used.
+        var email = error.email
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential
+        // ...
+      })
+    setUserState(prevValue => {
+      return {
+        ...prevValue,
+        loading: false,
+      }
+    })
+  }
+
   const handleShow = () => {
     setShowSignUp(!showSignUp)
     setShowSignIn(!showSignIn)
@@ -313,19 +391,6 @@ const Booking = () => {
         loading: true,
       }
     })
-    let addMessage = firebase.functions().httpsCallable("addMessage")
-    addMessage({ message: userState.email })
-      .then(result => {
-        console.log(result.data.message)
-      })
-      .catch(function (error) {
-        // Getting the Error details.
-        var code = error.code
-        var message = error.message
-        var details = error.details
-        console.log(code, message, details)
-        // ...
-      })
 
     const batch = firebase.firestore().batch()
     const std = firebase.firestore().collection("stdRoom")
@@ -502,6 +567,7 @@ const Booking = () => {
             dismiss={handleDismiss}
             errorMessage={userState.errorMessage}
             choice={handleShow}
+            googleSignIn={googleSignIn}
           />
         </div>
       )}

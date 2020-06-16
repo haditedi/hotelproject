@@ -5,7 +5,8 @@ import SEO from "../components/seo"
 import SearchAvailability from "../components/SearchAvailability"
 import HeadingText from "../components/HeadingText"
 import moment from "moment"
-import useFirebase from "../components/useFirebase"
+//import useFirebase from "../components/useFirebase"
+import firebase from "gatsby-plugin-firebase"
 import SearchResult from "../components/SearchResult"
 import Spinner from "../components/Spinner"
 import { navigate } from "gatsby"
@@ -19,7 +20,7 @@ const IndexPage = () => {
   const state = useContext(GlobalStateContext)
   const setSearchState = useContext(GlobalSetSearchContext)
 
-  const firebase = useFirebase()
+  //const firebase = useFirebase()
 
   const arrive = state.arrivalDate
   const depart = state.departureDate
