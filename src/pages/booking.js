@@ -53,6 +53,7 @@ const Booking = () => {
     })
     const unsubscribe = firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
+        console.log("USERSTATE", userState)
         console.log("USER", user)
         if (state.totalNight > 0) {
           setUserState(prevValue => {
@@ -62,40 +63,62 @@ const Booking = () => {
             }
           })
         }
+        setTimeout(() => {
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(user.uid)
+            .get()
+            .then(doc => {
+              if (doc.exists) {
+                setUserState(prevValue => {
+                  console.log("DOC", doc.data().name)
+                  return {
+                    ...prevValue,
+                    user: user,
+                    userName: doc.data().name,
+                    email: doc.data().email,
+                    userId: user.uid,
+                  }
+                })
+              } else {
+                console.log("DOC NOT EXIST", user.displayName)
+                setUserState(prevValue => {
+                  return {
+                    ...prevValue,
+                    user: user,
+                    userName: user.displayName,
+                    email: user.email,
+                    userId: user.uid,
+                  }
+                })
+                firebase
+                  .firestore()
+                  .collection("users")
+                  .doc(user.uid)
+                  .set({
+                    name: user.displayName,
+                    email: user.email,
+                    userId: user.uid,
+                  })
+                  .then(() => console.log("USERS UPDATED SUCCESS"))
+                  .catch(error => console.log("USERS UPDATE ERROR ", error))
+              }
+            })
+            .catch(err => {
+              console.log("ERRROR", err)
+            })
 
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(user.uid)
-          .get()
-          .then(doc => {
-            if (doc.exists) {
-              setUserState(prevValue => {
-                return {
-                  ...prevValue,
-                  user: user,
-                  userName: doc.data().name,
-                  email: doc.data().email,
-                  userId: user.uid,
-                  showBookingProceed: true,
-                }
-              })
-            } else {
-              console.log("DOC NOT EXIST")
+          setUserState(prevValue => {
+            return {
+              ...prevValue,
+              loading: false,
+              showBookingProceed: true,
             }
           })
-          .catch(err => {
-            console.log("ERRROR", err)
-          })
-
-        setUserState(prevValue => {
-          return {
-            ...prevValue,
-            loading: false,
-          }
-        })
-        setShowSignUp(false)
-        setShowSignIn(false)
+          setShowSignUp(false)
+          setShowSignIn(false)
+        }, 2000)
       } else {
         setShowSignIn(true)
         setBookingList([])
@@ -115,6 +138,7 @@ const Booking = () => {
         })
       }
     })
+    console.log("USERSTATE", userState)
     return () => unsubscribe()
   }, [firebase])
 
@@ -172,44 +196,14 @@ const Booking = () => {
         .auth()
         .createUserWithEmailAndPassword(userState.email, userState.password)
         .then(resp => {
-          // let actionCodeSettings = {
-          //   url:
-          //     "http://localhost:8000/booking?email=" +
-          //     firebase.auth().currentUser.email,
+          let user = firebase.auth().currentUser
 
-          //   handleCodeInApp: false,
-          // }
-          // resp.user
-          //   .sendEmailVerification(actionCodeSettings)
-          //   .then(function () {
-          //     console.log("EMAIL SENT")
-          //     setInfo(
-          //       `Thank you for registering ${userState.userName}. An email verification was sent to your email address.`
-          //     )
-          //     setTimeout(() => setInfo(""), 5000)
-          //   })
-          //   .catch(function (error) {
-          //     console.log(error)
-          //     setInfo("Sorry there was an error")
-          //     setTimeout(() => setInfo(""), 3000)
-          //   })
-
-          firebase.firestore().collection("users").doc(resp.user.uid).set({
-            name: userState.userName,
-            email: userState.email,
-            userId: resp.user.uid,
-          })
-
-          setUserState(prevState => {
-            return {
-              ...prevState,
-              user: resp.user,
-              userId: resp.user.uid,
-              error: false,
-              errorMessage: "",
-              password: "",
-            }
-          })
+          user
+            .updateProfile({
+              displayName: userState.userName,
+            })
+            .then(() => console.log("SIGNUP - UPDATE PROFILE DONE"))
+            .catch(error => console.log(error))
         })
         .catch(function (error) {
           // Handle Errors here.
@@ -280,46 +274,6 @@ const Booking = () => {
       .signInWithPopup(provider)
       .then(function (result) {
         console.log("GOOGLE IN", result)
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(result.user.uid)
-          .get()
-          .then(doc => {
-            if (doc.exists) {
-              console.log("GOOGLE doc exist")
-            } else {
-              console.log("GOOGLE doc NOT exist")
-              setUserState(prevValue => {
-                return {
-                  ...prevValue,
-                  user: result.user,
-                  userName: result.user.displayName,
-                  email: result.user.email,
-                  userId: result.user.uid,
-                  showBookingProceed: true,
-                }
-              })
-              firebase
-                .firestore()
-                .collection("users")
-                .doc(result.user.uid)
-                .set({
-                  email: result.user.email,
-                  name: result.user.displayName,
-                  userId: result.user.uid,
-                })
-                .then(() => console.log("WRITE SUCCESS"))
-                .catch(error => console.log("ERROR", error))
-            }
-          })
-
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        var token = result.credential.accessToken
-        // The signed-in user info.
-        var user = result.user
-
-        // ...
       })
       .catch(function (error) {
         // Handle Errors here.
@@ -332,12 +286,12 @@ const Booking = () => {
         var credential = error.credential
         // ...
       })
-    setUserState(prevValue => {
-      return {
-        ...prevValue,
-        loading: false,
-      }
-    })
+    // setUserState(prevValue => {
+    //   return {
+    //     ...prevValue,
+    //     loading: false,
+    //   }
+    // })
   }
 
   const handleShow = () => {
@@ -545,7 +499,7 @@ const Booking = () => {
       setTimeout(() => setInfo(""), 3000)
     }
   }
-
+  console.log("END", userState)
   return (
     <Layout>
       {userState.loading && <Spinner />}
