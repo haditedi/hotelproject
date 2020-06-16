@@ -47,6 +47,7 @@ const Booking = () => {
   const [info, setInfo] = useState("")
 
   useEffect(() => {
+    console.log(firebase.auth().currentUser)
     setUserState(prevValue => {
       return {
         ...prevValue,
@@ -172,6 +173,29 @@ const Booking = () => {
         .createUserWithEmailAndPassword(userState.email, userState.password)
         .then(resp => {
           console.log("[handleSignUp] ", resp)
+
+          // let actionCodeSettings = {
+          //   url:
+          //     "http://localhost:8000/booking?email=" +
+          //     firebase.auth().currentUser.email,
+
+          //   handleCodeInApp: false,
+          // }
+          // resp.user
+          //   .sendEmailVerification(actionCodeSettings)
+          //   .then(function () {
+          //     console.log("EMAIL SENT")
+          //     setInfo(
+          //       `Thank you for registering ${userState.userName}. An email verification was sent to your email address.`
+          //     )
+          //     setTimeout(() => setInfo(""), 5000)
+          //   })
+          //   .catch(function (error) {
+          //     console.log(error)
+          //     setInfo("Sorry there was an error")
+          //     setTimeout(() => setInfo(""), 3000)
+          //   })
+
           firebase.firestore().collection("users").doc(resp.user.uid).set({
             name: userState.userName,
             email: userState.email,
@@ -282,6 +306,7 @@ const Booking = () => {
 
   const handleCardSubmit = e => {
     e.preventDefault()
+
     setUserState(prevState => {
       return {
         ...prevState,

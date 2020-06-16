@@ -1,0 +1,19 @@
+.contact {
+  display: flex;
+
+  align-items: center;
+  flex-direction: column;
+}
+.icon {
+  width: 100%;
+
+  margin-bottom: 1rem;
+}
+.iconimg {
+  max-height: 200px;
+}
+@media (min-width: 700px) {
+  .icon {
+    width: 30vw;
+  }
+}

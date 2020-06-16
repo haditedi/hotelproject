@@ -9,7 +9,7 @@ const formui = () => {
     <form
       className={classes.formui}
       name="contact"
-      action="/success"
+      action="https://us-central1-firestore-b0c8c.cloudfunctions.net/emailMessage"
       method="POST"
     >
       <input type="hidden" name="form-name" value="contact"></input>

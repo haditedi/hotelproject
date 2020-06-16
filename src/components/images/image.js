@@ -123,7 +123,7 @@ const Image = () => {
         <div className={classes.slideInBlurredLeft}>
           <Img
             style={{ margin: "20px auto" }}
-            className={classes.img}
+            className={[classes.img, classes.puffOutHor].join(" ")}
             fluid={sourceOutdoor}
           />
         </div>
@@ -132,7 +132,7 @@ const Image = () => {
         <div className={classes.slideInBlurredLeft}>
           <Img
             style={{ margin: "20px auto" }}
-            className={classes.img}
+            className={[classes.img, classes.puffOutHor].join(" ")}
             fluid={sourcePool}
           />
         </div>
@@ -142,7 +142,7 @@ const Image = () => {
         <div className={classes.slideInBlurredLeft}>
           <Img
             style={{ margin: "20px auto" }}
-            className={classes.img}
+            className={[classes.img, classes.puffOutHor].join(" ")}
             fluid={sourceNight}
           />
         </div>
