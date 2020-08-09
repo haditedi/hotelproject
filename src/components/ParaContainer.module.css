@@ -1,12 +1,12 @@
 .para {
   width: 80vw;
   max-width: 700px;
-  margin: 10px auto;
+  margin: 20px auto;
   padding: 15px 25px;
   text-align: center;
 
-  box-shadow: 0 3px 3px 3px #035aa6;
-  background-color: #fcbf1e;
+  box-shadow: 0 0 1px 1px #7f8fa6;
+
   /* #fcbf1e; */
 }
 .para p {

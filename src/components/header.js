@@ -6,13 +6,14 @@ import Menu from "@material-ui/core/Menu"
 import MenuItem from "@material-ui/core/MenuItem"
 import { makeStyles } from "@material-ui/core/styles"
 import css from "./header.module.css"
+import logo from "../images/logo.svg"
 
 const useStyles = makeStyles({
   root: {
     margin: "auto 20px",
   },
   back: {
-    backgroundColor: "#035aa6",
+    backgroundColor: "#353b48",
   },
 })
 
@@ -36,7 +37,11 @@ const Header = props => {
         }}
       >
         <Link to="/">
-          <h1 className={classes.root}>Logo</h1>
+          <img
+            src={logo}
+            style={{ height: "50px", width: "120px", marginBottom: "0" }}
+            alt="logo"
+          />
         </Link>
         <div className={css.notShow}>
           <Link

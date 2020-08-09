@@ -81,7 +81,12 @@ const SignIn = props => {
           )}
 
           <Button
-            style={{ width: "150px", marginBottom: "25px" }}
+            style={{
+              width: "150px",
+              marginBottom: "25px",
+              background: "#3f51b5",
+              color: "white",
+            }}
             id="signIn"
             variant="contained"
             type="submit"

@@ -16,7 +16,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   max-width: 1440px;
   margin: 0 auto;
-  background-color: #40bad5;
+  background-color: #dcdde1;
   color: #120136;
 }
 
@@ -33,6 +33,9 @@ a {
 a:active,
 a:hover {
   outline-width: 0;
+}
+a:visited {
+  color: white;
 }
 
 body {

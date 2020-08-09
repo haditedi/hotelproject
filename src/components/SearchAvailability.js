@@ -81,8 +81,9 @@ const SearchAvailability = props => {
         </FormControl>
         <Button
           id="searchButton"
+          style={{ background: "white" }}
           className={classes.root}
-          variant="contained"
+          variant="outlined"
           type="submit"
         >
           Search

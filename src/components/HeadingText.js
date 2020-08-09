@@ -15,7 +15,6 @@ const HeadingText = props => {
       style={{
         padding: "1.5em 0",
         textAlign: "center",
-        backgroundColor: "#fcbf1e",
       }}
     >
       <h1

@@ -59,15 +59,18 @@ const Layout = props => {
 
         <main>{props.children}</main>
       </div>
-      <footer style={{ textAlign: "center", color: "white" }}>
+      <footer
+        style={{ textAlign: "center", color: "white", background: "#353b48" }}
+      >
         <p>
-          © {new Date().getFullYear()} Hotel Paradise. Created by{" "}
+          © {new Date().getFullYear()} Hotel Paradise. Created by
           <a
-            href="https://www.it-tedi.tech"
+            href="https://www.tedi.tech"
             rel="noopener noreferrer"
             target="_blank"
           >
-            IT - TEDI
+            {" "}
+            Hadi Tedi
           </a>
         </p>
       </footer>

@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: column;
   margin: 25px;
-  box-shadow: 0 3px 3px 3px #035aa6;
-  background-color: #ddd;
+  box-shadow: 0 0 1px 1px #7f8fa6;
+
   max-width: 700px;
 }
 .container p {
